@@ -1,0 +1,2105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AuraAI - AI-Powered OnlyFans Chat Automation</title>
+  <style>
+    /* Modern Apple-inspired Design System with Enhanced Glassmorphism */
+    :root {
+      /* Core colors */
+      --bg-primary: #000000;
+      --bg-secondary: #0a0a0a;
+      --bg-tertiary: #1a1a1a;
+      --accent-primary: #2f7fff;
+      --accent-secondary: #46a6ff;
+      --accent-glow: rgba(47, 127, 255, 0.3);
+      --text-primary: #ffffff;
+      --text-secondary: rgba(255, 255, 255, 0.7);
+      --text-tertiary: rgba(255, 255, 255, 0.5);
+      --success: #2ecc71;
+      --success-glow: rgba(46, 204, 113, 0.3);
+      --warning: #f39c12;
+      --danger: #e74c3c;
+      --danger-glow: rgba(231, 76, 60, 0.3);
+      
+      /* Spacing */
+      --spacing-xs: 4px;
+      --spacing-sm: 8px;
+      --spacing-md: 16px;
+      --spacing-lg: 24px;
+      --spacing-xl: 32px;
+      --spacing-xxl: 48px;
+      --spacing-xxxl: 64px;
+      
+      /* Typography */
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      
+      /* Radii */
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-full: 9999px;
+      
+      /* Z-index layers */
+      --z-navbar: 100;
+      --z-modal: 200;
+      
+      /* Enhanced Glass effects */
+      --glass-bg: rgba(10, 10, 10, 0.4);
+      --glass-border: rgba(255, 255, 255, 0.15);
+      --glass-blur: 15px;
+      --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      --glass-highlight: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.15) 0%,
+        rgba(255, 255, 255, 0.05) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 20% 20%, rgba(70, 166, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(46, 204, 113, 0.08) 0%, transparent 50%);
+      background-attachment: fixed;
+    }
+    
+    /* Typography */
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+    }
+    
+    h1 {
+      font-size: 3.5rem;
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    h2 {
+      font-size: 2.5rem;
+      margin-bottom: var(--spacing-md);
+    }
+    
+    h3 {
+      font-size: 1.75rem;
+      margin-bottom: var(--spacing-md);
+    }
+    
+    p {
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: var(--spacing-md);
+    }
+    
+    a {
+      color: var(--accent-primary);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    
+    a:hover {
+      color: var(--accent-secondary);
+    }
+    
+    /* Layout */
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--spacing-lg);
+    }
+    
+    .section {
+      padding: var(--spacing-xxxl) 0;
+      position: relative;
+    }
+    
+    .section-inner {
+      position: relative;
+      z-index: 2;
+    }
+    
+    .section-title {
+      text-align: center;
+      margin-bottom: var(--spacing-xxl);
+    }
+    
+    .section-subtitle {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto var(--spacing-xxl);
+      color: var(--text-secondary);
+      font-size: 1.2rem;
+    }
+    
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 0 -15px;
+    }
+    
+    .col {
+      padding: 0 15px;
+      flex: 1;
+    }
+    
+    /* Enhanced Glassmorphism Base */
+    .glass {
+      background: var(--glass-bg);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .glass::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, 
+                                 transparent, 
+                                 rgba(255, 255, 255, 0.3), 
+                                 transparent);
+    }
+    
+    .glass::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--glass-highlight);
+      pointer-events: none;
+    }
+    
+    /* Header & Navigation */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: var(--z-navbar);
+      background-color: rgba(10, 10, 10, 0.5);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border-bottom: 1px solid var(--glass-border);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .header.scrolled {
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+    
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--spacing-md) 0;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+    
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: var(--spacing-md);
+      box-shadow: 0 4px 20px rgba(47, 127, 255, 0.5);
+    }
+    
+    .logo-text {
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      position: relative;
+    }
+    
+    .logo-text::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent-primary), transparent);
+    }
+    
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: var(--spacing-lg);
+    }
+    
+    .nav-link {
+      color: var(--text-secondary);
+      font-weight: 500;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+      transition: width 0.3s ease;
+    }
+    
+    .nav-link:hover {
+      color: var(--text-primary);
+    }
+    
+    .nav-link:hover::after,
+    .nav-link.active::after {
+      width: 100%;
+    }
+    
+    .nav-link.active {
+      color: var(--text-primary);
+    }
+    
+    .mobile-menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text-primary);
+      font-size: 24px;
+      cursor: pointer;
+    }
+    
+    /* Buttons */
+    .btn {
+      border: none;
+      outline: none;
+      padding: var(--spacing-md) var(--spacing-lg);
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-sm);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.1);
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+    }
+    
+    .btn:hover::before {
+      transform: translateX(0);
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      color: var(--text-primary);
+      box-shadow: 0 4px 14px rgba(47, 127, 255, 0.4);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(47, 127, 255, 0.5);
+    }
+    
+    .btn-primary:active {
+      transform: translateY(0);
+      opacity: 0.9;
+    }
+    
+    .btn-secondary {
+      background-color: rgba(26, 26, 26, 0.7);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      color: var(--text-primary);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+    }
+    
+    .btn-secondary:hover {
+      background-color: rgba(47, 127, 255, 0.1);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    }
+    
+    .btn-large {
+      padding: var(--spacing-md) var(--spacing-xl);
+      font-size: 16px;
+    }
+    
+    .btn-cta {
+      border-radius: var(--radius-full);
+      padding: var(--spacing-md) var(--spacing-xxl);
+      font-size: 16px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding-top: 80px;
+    }
+    
+    .hero-content {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      z-index: 2;
+      text-align: center;
+    }
+    
+    .hero-title {
+      font-size: 4rem;
+      margin-bottom: var(--spacing-lg);
+      line-height: 1.1;
+    }
+    
+    .hero-subtitle {
+      font-size: 1.3rem;
+      color: var(--text-secondary);
+      margin-bottom: var(--spacing-xl);
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .hero-cta {
+      display: flex;
+      gap: var(--spacing-md);
+      margin-top: var(--spacing-lg);
+      justify-content: center;
+    }
+    
+    .hero-card {
+      padding: var(--spacing-xl);
+      border-radius: var(--radius-lg);
+      background: rgba(10, 10, 10, 0.5);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      margin-bottom: var(--spacing-xl);
+      transform: translateY(0);
+      transition: all 0.5s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -50%;
+      width: 200%;
+      height: 1px;
+      background: linear-gradient(90deg, 
+                                 transparent, 
+                                 rgba(255, 255, 255, 0.5), 
+                                 transparent);
+    }
+    
+    .hero-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, 
+                                rgba(255, 255, 255, 0.1) 0%, 
+                                rgba(255, 255, 255, 0) 100%);
+      pointer-events: none;
+    }
+    
+    .hero-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+      border-color: rgba(47, 127, 255, 0.4);
+    }
+    
+    .hero-blob {
+      position: absolute;
+      width: 800px;
+      height: 800px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--accent-glow) 0%, rgba(0,0,0,0) 70%);
+      top: -200px;
+      right: -200px;
+      z-index: 0;
+      opacity: 0.6;
+      filter: blur(80px);
+      animation: pulse 15s infinite alternate;
+    }
+    
+    .hero-blob-2 {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(70, 166, 255, 0.15) 0%, rgba(0,0,0,0) 70%);
+      bottom: -100px;
+      left: -100px;
+      z-index: 0;
+      opacity: 0.5;
+      filter: blur(80px);
+      animation: pulse 20s infinite alternate-reverse;
+    }
+    
+    @keyframes pulse {
+      0% {
+        opacity: 0.4;
+        transform: scale(1);
+      }
+      100% {
+        opacity: 0.7;
+        transform: scale(1.1);
+      }
+    }
+    
+    /* Features Section */
+    .features {
+      background-color: rgba(10, 10, 10, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: var(--spacing-xl);
+    }
+    
+    .feature-card {
+      background-color: rgba(26, 26, 26, 0.5);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-xl);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: all 0.3s ease;
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    }
+    
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 200%;
+      height: 1px;
+      background: linear-gradient(90deg, 
+                                 transparent, 
+                                 rgba(255, 255, 255, 0.3), 
+                                 transparent);
+    }
+    
+    .feature-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, 
+                                rgba(255, 255, 255, 0.1) 0%, 
+                                rgba(255, 255, 255, 0) 100%);
+      pointer-events: none;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+      background-color: rgba(47, 127, 255, 0.1);
+    }
+    
+    .feature-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, var(--accent-primary), rgba(70, 166, 255, 0.5));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: var(--spacing-md);
+      box-shadow: 0 4px 15px rgba(47, 127, 255, 0.3);
+    }
+    
+    .feature-icon svg {
+      width: 30px;
+      height: 30px;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    }
+    
+    .feature-title {
+      font-size: 1.4rem;
+      margin-bottom: var(--spacing-sm);
+    }
+    
+    .feature-description {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+    
+    /* How It Works Section */
+    .how-it-works {
+      position: relative;
+    }
+    
+    .steps {
+      display: flex;
+      justify-content: space-between;
+      margin-top: var(--spacing-xxl);
+      position: relative;
+    }
+    
+    .steps::before {
+      content: '';
+      position: absolute;
+      top: 40px;
+      left: 40px;
+      right: 40px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+      z-index: 0;
+      opacity: 0.5;
+    }
+    
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      max-width: 250px;
+      z-index: 1;
+    }
+    
+    .step-number {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: var(--spacing-md);
+      box-shadow: 0 8px 20px rgba(47, 127, 255, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .step-number::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, 
+                                rgba(255, 255, 255, 0.3) 0%, 
+                                rgba(255, 255, 255, 0) 50%);
+      pointer-events: none;
+    }
+    
+    .step-title {
+      font-size: 1.3rem;
+      margin-bottom: var(--spacing-sm);
+    }
+    
+    .step-description {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+    
+    .step-card {
+      background-color: rgba(26, 26, 26, 0.5);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-lg);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .step-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 200%;
+      height: 1px;
+      background: linear-gradient(90deg, 
+                                 transparent, 
+                                 rgba(255, 255, 255, 0.3), 
+                                 transparent);
+    }
+    
+    .step-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, 
+                                rgba(255, 255, 255, 0.1) 0%, 
+                                rgba(255, 255, 255, 0) 100%);
+      pointer-events: none;
+    }
+    
+    .step-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+      border-color: rgba(47, 127, 255, 0.25);
+      background-color: rgba(47, 127, 255, 0.05);
+    }
+    
+    /* Pricing Section */
+    .pricing {
+      background-color: rgba(10, 10, 10, 0.3);
+      position: relative;
+    }
+    
+    .pricing-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: var(--spacing-xl);
+    }
+    
+    .toggle-label {
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+    
+    .toggle-label.active {
+      color: var(--text-primary);
+    }
+    
+    .toggle-switch {
+      width: 50px;
+      height: 26px;
+      border-radius: 13px;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      margin: 0 var(--spacing-md);
+      position: relative;
+      cursor: pointer;
+      box-shadow: 0 2px 10px rgba(47, 127, 255, 0.3);
+    }
+    
+    .toggle-switch::before {
+      content: '';
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background-color: white;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.3s ease;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    }
+    
+    .toggle-switch.yearly::before {
+      transform: translateX(24px);
+    }
+    
+    .pricing-plans {
+      display: flex;
+      gap: var(--spacing-lg);
+      margin-top: var(--spacing-xl);
+      position: relative;
+    }
+    
+    .pricing-plan {
+      flex: 1;
+      background-color: rgba(26, 26, 26, 0.5);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-xl);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    }
+    
+    .pricing-plan::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 200%;
+      height: 1px;
+      background: linear-gradient(90deg, 
+                                 transparent, 
+                                 rgba(255, 255, 255, 0.3), 
+                                 transparent);
+    }
+    
+    .pricing-plan::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, 
+                                rgba(255, 255, 255, 0.1) 0%, 
+                                rgba(255, 255, 255, 0) 100%);
+      pointer-events: none;
+    }
+    
+    .pricing-plan:hover {
+      transform: translateY(-5px);
+      border-color: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+    }
+    
+    .pricing-plan.popular {
+      border-color: var(--accent-primary);
+      transform: scale(1.05);
+      z-index: 1;
+      background-color: rgba(47, 127, 255, 0.1);
+      box-shadow: 0 15px 40px rgba(47, 127, 255, 0.2);
+    }
+    
+    .pricing-plan.popular:hover {
+      transform: scale(1.05) translateY(-5px);
+      box-shadow: 0 20px 50px rgba(47, 127, 255, 0.3);
+    }
+    
+    .plan-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      color: white;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(47, 127, 255, 0.3);
+    }
+    
+    .plan-name {
+      font-size: 1.4rem;
+      margin-bottom: var(--spacing-sm);
+    }
+    
+    .plan-price {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: var(--spacing-sm);
+      background: linear-gradient(135deg, #ffffff, #a0a0a0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .plan-billing {
+      color: var(--text-tertiary);
+      margin-bottom: var(--spacing-lg);
+      font-size: 0.9rem;
+    }
+    
+    .plan-features {
+      list-style: none;
+      margin-bottom: var(--spacing-xl);
+    }
+    
+    .plan-feature {
+      display: flex;
+      align-items: center;
+      margin-bottom: var(--spacing-sm);
+      color: var(--text-secondary);
+    }
+    
+    .plan-feature svg {
+      margin-right: var(--spacing-sm);
+      color: var(--success);
+      filter: drop-shadow(0 2px 3px rgba(46, 204, 113, 0.3));
+    }
+    
+    .plan-cta {
+      width: 100%;
+    }
+    
+    /* Testimonials Section */
+    .testimonials {
+      position: relative;
+    }
+    
+    .testimonials-container {
+      position: relative;
+      overflow: hidden;
+      padding: var(--spacing-lg) 0;
+    }
+    
+    .testimonials-track {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    
+    .testimonial {
+      min-width: 100%;
+      padding: 0 var(--spacing-md);
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      display: flex;
+    }
+    
+    .testimonial.active {
+      opacity: 1;
+    }
+    
+    .testimonial-card {
+      background-color: rgba(26, 26, 26, 0.5);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-xl);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .testimonial-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 200%;
+      height: 1px;
+      background: linear-gradient(90deg, 
+                                 transparent, 
+                                 rgba(255, 255, 255, 0.3), 
+                                 transparent);
+    }
+    
+    .testimonial-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, 
+                                rgba(255, 255, 255, 0.1) 0%, 
+                                rgba(255, 255, 255, 0) 100%);
+      pointer-events: none;
+    }
+    
+    .testimonial-card:hover {
+      border-color: rgba(47, 127, 255, 0.25);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+      background-color: rgba(47, 127, 255, 0.05);
+    }
+    
+    .testimonial-content {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      margin-bottom: var(--spacing-lg);
+      flex: 1;
+    }
+    
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+    }
+    
+    .author-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: var(--accent-glow);
+      margin-right: var(--spacing-md);
+      overflow: hidden;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    
+    .author-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .author-info h4 {
+      font-size: 1.1rem;
+      margin-bottom: 2px;
+    }
+    
+    .author-info p {
+      font-size: 0.9rem;
+      color: var(--text-tertiary);
+      margin: 0;
+    }
+    
+    .testimonial-controls {
+      display: flex;
+      justify-content: center;
+      margin-top: var(--spacing-lg);
+      gap: var(--spacing-md);
+    }
+    
+    .testimonial-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: var(--bg-tertiary);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+    
+    .testimonial-dot.active {
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      transform: scale(1.3);
+      box-shadow: 0 2px 8px rgba(47, 127, 255, 0.3);
+    }
+    
+    /* FAQ Section */
+    .faq {
+      background-color: rgba(10, 10, 10, 0.3);
+    }
+    
+    .faq-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .faq-item {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: var(--spacing-md);
+    }
+    
+    .faq-question {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--spacing-md) 0;
+      cursor: pointer;
+      user-select: none;
+    }
+    
+    .faq-question h3 {
+      font-size: 1.2rem;
+      margin: 0;
+    }
+    
+    .faq-icon {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease;
+    }
+    
+    .faq-item.active .faq-icon {
+      transform: rotate(45deg);
+    }
+    
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+      padding: 0;
+    }
+    
+    .faq-item.active .faq-answer {
+      max-height: 300px;
+      padding-bottom: var(--spacing-md);
+    }
+    
+    /* CTA Section */
+    .cta {
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .cta-content {
+      max-width: 700px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+    
+    .cta-card {
+      background-color: rgba(26, 26, 26, 0.5);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-xxl);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .cta-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 200%;
+      height: 1px;
+      background: linear-gradient(90deg, 
+                                 transparent, 
+                                 rgba(255, 255, 255, 0.3), 
+                                 transparent);
+    }
+    
+    .cta-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, 
+                                rgba(255, 255, 255, 0.1) 0%, 
+                                rgba(255, 255, 255, 0) 100%);
+      pointer-events: none;
+    }
+    
+    .cta-card:hover {
+      border-color: rgba(47, 127, 255, 0.25);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+      background-color: rgba(47, 127, 255, 0.05);
+    }
+    
+    .cta-title {
+      font-size: 2.8rem;
+      margin-bottom: var(--spacing-md);
+    }
+    
+    .cta-subtitle {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      margin-bottom: var(--spacing-xl);
+    }
+    
+    .cta-buttons {
+      display: flex;
+      justify-content: center;
+      gap: var(--spacing-md);
+    }
+    
+    .cta-blob-1 {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--accent-glow) 0%, rgba(0,0,0,0) 70%);
+      top: -300px;
+      left: -200px;
+      z-index: 0;
+      opacity: 0.5;
+      filter: blur(80px);
+      animation: pulse 15s infinite alternate;
+    }
+    
+    .cta-blob-2 {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(46, 204, 113, 0.15) 0%, rgba(0,0,0,0) 70%);
+      bottom: -250px;
+      right: -150px;
+      z-index: 0;
+      opacity: 0.5;
+      filter: blur(80px);
+      animation: pulse 20s infinite alternate-reverse;
+    }
+    
+    /* Footer */
+    .footer {
+      background-color: rgba(26, 26, 26, 0.5);
+      padding: var(--spacing-xxl) 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+    }
+    
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: var(--spacing-xl);
+    }
+    
+    .footer-logo {
+      margin-bottom: var(--spacing-md);
+    }
+    
+    .footer-description {
+      max-width: 300px;
+      color: var(--text-tertiary);
+      font-size: 0.9rem;
+    }
+    
+    .footer-links-column {
+      min-width: 160px;
+    }
+    
+    .footer-links-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: var(--spacing-md);
+      color: var(--text-primary);
+      position: relative;
+      display: inline-block;
+    }
+    
+    .footer-links-title::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 30px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent-primary), transparent);
+    }
+    
+    .footer-links {
+      list-style: none;
+    }
+    
+    .footer-link {
+      margin-bottom: var(--spacing-sm);
+    }
+    
+    .footer-link a {
+      color: var(--text-tertiary);
+      font-size: 0.9rem;
+      transition: color 0.2s ease;
+    }
+    
+    .footer-link a:hover {
+      color: var(--accent-primary);
+    }
+    
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: var(--spacing-lg);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      color: var(--text-tertiary);
+      font-size: 0.9rem;
+    }
+    
+    .footer-social {
+      display: flex;
+      gap: var(--spacing-md);
+    }
+    
+    .social-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: rgba(26, 26, 26, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .social-icon::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, 
+                                rgba(255, 255, 255, 0.1) 0%, 
+                                rgba(255, 255, 255, 0) 100%);
+      pointer-events: none;
+    }
+    
+    .social-icon:hover {
+      background-color: var(--accent-glow);
+      transform: translateY(-3px);
+      border-color: var(--accent-primary);
+      box-shadow: 0 5px 15px rgba(47, 127, 255, 0.3);
+    }
+    
+    /* Modal */
+    .modal-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: var(--z-modal);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .modal-container.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .modal {
+      background-color: rgba(26, 26, 26, 0.7);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-xl);
+      max-width: 500px;
+      width: 90%;
+      position: relative;
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+    }
+    
+    .modal::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 200%;
+      height: 1px;
+      background: linear-gradient(90deg, 
+                                 transparent, 
+                                 rgba(255, 255, 255, 0.3), 
+                                 transparent);
+    }
+    
+    .modal::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, 
+                                rgba(255, 255, 255, 0.1) 0%, 
+                                rgba(255, 255, 255, 0) 100%);
+      pointer-events: none;
+    }
+    
+    .modal-container.active .modal {
+      transform: translateY(0);
+    }
+    
+    .modal-close {
+      position: absolute;
+      top: var(--spacing-md);
+      right: var(--spacing-md);
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 24px;
+      cursor: pointer;
+      z-index: 1;
+    }
+    
+    .modal-title {
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .form-group {
+      margin-bottom: var(--spacing-md);
+    }
+    
+    .form-label {
+      display: block;
+      margin-bottom: var(--spacing-xs);
+      color: var(--text-secondary);
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: var(--spacing-md);
+      border-radius: var(--radius-md);
+      background-color: rgba(26, 26, 26, 0.7);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: var(--text-primary);
+      font-size: 16px;
+      transition: all 0.2s ease;
+    }
+    
+    .form-input:focus {
+      outline: none;
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+    
+    .form-btn {
+      width: 100%;
+      margin-top: var(--spacing-md);
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+      .hero-image {
+        display: none;
+      }
+      
+      .steps {
+        flex-direction: column;
+        align-items: center;
+        gap: var(--spacing-xl);
+      }
+      
+      .steps::before {
+        display: none;
+      }
+      
+      .step {
+        max-width: 400px;
+      }
+      
+      .pricing-plans {
+        flex-direction: column;
+        max-width: 500px;
+        margin: var(--spacing-xl) auto 0;
+      }
+      
+      .pricing-plan.popular {
+        transform: scale(1);
+      }
+      
+      .pricing-plan.popular:hover {
+        transform: translateY(-5px);
+      }
+    }
+    
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.5rem;
+      }
+      
+      h2 {
+        font-size: 2rem;
+      }
+      
+      .hero {
+        padding-top: 100px;
+        min-height: auto;
+        padding-bottom: var(--spacing-xxl);
+      }
+      
+      .hero-content {
+        max-width: 100%;
+        text-align: center;
+      }
+      
+      .hero-title {
+        font-size: 3rem;
+      }
+      
+      .hero-cta {
+        justify-content: center;
+      }
+      
+      .mobile-menu-toggle {
+        display: block;
+      }
+      
+      .nav-links {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        flex-direction: column;
+        background-color: rgba(10, 10, 10, 0.9);
+        backdrop-filter: blur(var(--glass-blur));
+        -webkit-backdrop-filter: blur(var(--glass-blur));
+        padding: var(--spacing-lg);
+        gap: var(--spacing-md);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        transform: translateY(-10px);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+      }
+      
+      .nav-links.active {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+      }
+      
+      .footer-content {
+        flex-direction: column;
+        gap: var(--spacing-xl);
+      }
+      
+      .footer-links-columns {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-xl);
+      }
+      
+      .footer-bottom {
+        flex-direction: column;
+        gap: var(--spacing-md);
+        text-align: center;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .container {
+        padding: 0 var(--spacing-md);
+      }
+      
+      .hero-title {
+        font-size: 2.5rem;
+      }
+      
+      .hero-cta {
+        flex-direction: column;
+      }
+      
+      .btn-cta {
+        width: 100%;
+      }
+      
+      .cta-buttons {
+        flex-direction: column;
+      }
+      
+      .footer-links-columns {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header & Navigation -->
+  <header class="header glass">
+    <div class="container">
+      <nav class="navbar">
+        <a href="#" class="logo">
+          <div class="logo-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M2 17L12 22L22 17" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M2 12L12 17L22 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="logo-text">AuraAI</div>
+        </a>
+        
+        <button class="mobile-menu-toggle" id="menu-toggle">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 12H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M3 6H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        
+        <ul class="nav-links" id="nav-links">
+          <li><a href="#features" class="nav-link">Features</a></li>
+          <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+          <li><a href="#pricing" class="nav-link">Pricing</a></li>
+          <li><a href="#testimonials" class="nav-link">Testimonials</a></li>
+          <li><a href="#faq" class="nav-link">FAQ</a></li>
+          <li><a href="#" class="btn btn-primary" id="login-btn">Login</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  
+  <!-- Hero Section -->
+  <section class="hero" id="hero">
+    <div class="container">
+      <div class="hero-card glass">
+        <div class="hero-content">
+          <h1 class="hero-title">Automate Your<br/><span style="background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">OnlyFans</span> Interactions</h1>
+          <p class="hero-subtitle">AuraAI uses advanced AI to chat with your subscribers, providing perfect English, lightning-fast responses, and personalized engagement that converts subscribers into loyal fans.</p>
+          <div class="hero-cta">
+            <a href="#" class="btn btn-primary btn-cta" id="get-started-btn">Get Started</a>
+            <a href="#how-it-works" class="btn btn-secondary btn-cta">How It Works</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-blob"></div>
+    <div class="hero-blob-2"></div>
+  </section>
+  
+  <!-- Features Section -->
+  <section class="section features" id="features">
+    <div class="container section-inner">
+      <h2 class="section-title">Why OnlyFans Creators Choose AuraAI</h2>
+      <p class="section-subtitle">Eliminate the problems of expensive human chatters and boost your revenue with our AI-powered solution.</p>
+      
+      <div class="features-grid">
+        <div class="feature-card glass">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Perfect English</h3>
+          <p class="feature-description">No more hiring chatters with poor English skills. Our AI delivers flawless communication that maintains your professional image and builds trust with subscribers.</p>
+        </div>
+        
+        <div class="feature-card glass">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M22 12H16L14 15H10L8 12H2" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M5.45 5.11L2 12V18C2 18.5304 2.21071 19.0391 2.58579 19.4142C2.96086 19.7893 3.46957 20 4 20H20C20.5304 20 21.0391 19.7893 21.4142 19.4142C21.7893 19.0391 22 18.5304 22 18V12L18.55 5.11C18.3844 4.77679 18.1292 4.49637 17.813 4.30028C17.4967 4.10419 17.1321 4.0002 16.76 4H7.24C6.86792 4.0002 6.50326 4.10419 6.18704 4.30028C5.87083 4.49637 5.61558 4.77679 5.45 5.11Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Cost Efficiency</h3>
+          <p class="feature-description">Save up to 90% compared to human chatters. Our AI works 24/7 without salary demands, sick days, or commission fees - just a simple monthly subscription.</p>
+        </div>
+        
+        <div class="feature-card glass">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 8V12L15 15" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M3.05 11.0001C3.31422 8.40081 4.55389 5.99848 6.52219 4.27895C8.49048 2.55943 11.0243 1.64228 13.6347 1.74552C16.2451 1.84876 18.6966 2.96646 20.5262 4.88449C22.3559 6.80253 23.4129 9.30343 23.4489 11.9146C23.4849 14.5258 22.4975 17.0567 20.7418 18.9977C18.986 20.9387 16.4606 22.1621 13.7666 22.4395C11.0726 22.7168 8.39255 22.0224 6.2267 20.5089C4.06085 18.9953 2.58368 16.7764 2.05 14.2001" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Lightning Fast Response</h3>
+          <p class="feature-description">No more waiting hours for chatters to respond. Our AI answers instantly, keeping subscribers engaged and preventing them from looking elsewhere.</p>
+        </div>
+        
+        <div class="feature-card glass">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20.84 4.60999C20.3292 4.099 19.7228 3.69364 19.0554 3.41708C18.3879 3.14052 17.6725 2.99817 16.95 2.99817C16.2275 2.99817 15.5121 3.14052 14.8446 3.41708C14.1772 3.69364 13.5708 4.099 13.06 4.60999L12 5.66999L10.94 4.60999C9.9083 3.5783 8.50903 2.9987 7.05 2.9987C5.59096 2.9987 4.19169 3.5783 3.16 4.60999C2.1283 5.64169 1.54871 7.04096 1.54871 8.49999C1.54871 9.95903 2.1283 11.3583 3.16 12.39L4.22 13.45L12 21.23L19.78 13.45L20.84 12.39C21.351 11.8792 21.7563 11.2728 22.0329 10.6053C22.3095 9.93789 22.4518 9.22248 22.4518 8.49999C22.4518 7.77751 22.3095 7.0621 22.0329 6.39464C21.7563 5.72718 21.351 5.12075 20.84 4.60999V4.60999Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Personalized Engagement</h3>
+          <p class="feature-description">Our AI learns each subscriber's preferences and history, providing genuine personalization that makes them feel valued and increases spending.</p>
+        </div>
+        
+        <div class="feature-card glass">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M2 12H22" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M12 2C14.5013 4.73835 15.9228 8.29203 16 12C15.9228 15.708 14.5013 19.2616 12 22C9.49872 19.2616 8.07725 15.708 8 12C8.07725 8.29203 9.49872 4.73835 12 2V2Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Global Accessibility</h3>
+          <p class="feature-description">Break language barriers and expand your audience worldwide. Our AI can chat with subscribers in multiple languages while maintaining your authentic voice.</p>
+        </div>
+        
+        <div class="feature-card glass">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M16 21V19C16 17.9391 15.5786 16.9217 14.8284 16.1716C14.0783 15.4214 13.0609 15 12 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M8.5 11C10.7091 11 12.5 9.20914 12.5 7C12.5 4.79086 10.7091 3 8.5 3C6.29086 3 4.5 4.79086 4.5 7C4.5 9.20914 6.29086 11 8.5 11Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M17 11L19 13L23 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Sales Conversion Power</h3>
+          <p class="feature-description">Our AI is trained to naturally upsell content and drive PPV purchases without being pushy, significantly increasing your revenue per subscriber.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- How It Works Section -->
+  <section class="section how-it-works" id="how-it-works">
+    <div class="container section-inner">
+      <h2 class="section-title">How It Works</h2>
+      <p class="section-subtitle">Getting started with AuraAI is simple. Follow these steps to begin automating your OnlyFans messaging.</p>
+      
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-card glass">
+            <h3 class="step-title">Connect Account</h3>
+            <p class="step-description">Securely connect your OnlyFans account through our easy setup process with just a few clicks.</p>
+          </div>
+        </div>
+        
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-card glass">
+            <h3 class="step-title">Train Your AI</h3>
+            <p class="step-description">Customize the AI with your voice, typical responses, and content catalog so it can perfectly represent your brand.</p>
+          </div>
+        </div>
+        
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-card glass">
+            <h3 class="step-title">Set Parameters</h3>
+            <p class="step-description">Define which messages the AI handles, your pricing strategy, and when you want to personally step in.</p>
+          </div>
+        </div>
+        
+        <div class="step">
+          <div class="step-number">4</div>
+          <div class="step-card glass">
+            <h3 class="step-title">Go Live</h3>
+            <p class="step-description">Activate the system and watch as it begins engaging with subscribers, driving sales, and saving you time.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Pricing Section -->
+  <section class="section pricing" id="pricing">
+    <div class="container section-inner">
+      <h2 class="section-title">Simple, Transparent Pricing</h2>
+      <p class="section-subtitle">Fraction of the cost of human chatters with superior results.</p>
+      
+      <div class="pricing-toggle">
+        <span class="toggle-label active" id="monthly-label">Monthly</span>
+        <div class="toggle-switch" id="pricing-toggle"></div>
+        <span class="toggle-label" id="yearly-label">Yearly (Save 20%)</span>
+      </div>
+      
+      <div class="pricing-plans">
+        <div class="pricing-plan glass">
+          <h3 class="plan-name">Solo Creator</h3>
+          <div class="plan-price" id="starter-price">$249</div>
+          <div class="plan-billing" id="starter-billing">per month</div>
+          
+          <ul class="plan-features">
+            <li class="plan-feature">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span>1 OnlyFans Account</span>
+            </li>
+            <li class="plan-feature">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span>Up to 1,000 Subscribers</span>
+            </li>
+            <li class="plan-feature">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span>Basic Sales Analytics</span>
+            </li>
+            <li class="plan-feature">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span>Email Support</span>
+            </li>
+          </ul>
+          
+          <a href="#" class="btn btn-secondary plan-cta">Get Started</a>
+        </div>
+        
+        <div class="pricing-plan popular glass">
+          <div class="plan-badge">Most Popular</div>
+          <h3 class="plan-name">Power Creator</h3>
+          <div class="plan-price" id="pro-price">$499</div>
+          <div class="plan-billing" id="pro-billing">per month</div>
+          
+          <ul class="plan-features">
+            <li class="plan-feature">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span>1 OnlyFans Account</span>
+            </li>
+            <li class="plan-feature">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span>Unlimited Subscribers</span>
+            </li>
+            <li class="plan-feature">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span>Advanced Sales Analytics</span>
+            </li>
+            <li class="plan-feature">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span>Priority Support</span>
+            </li>
+            <li class="plan-feature">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span>Advanced Personalization</span>
+            </li>
+          </ul>
+          
+          <a href="#" class="btn btn-primary plan-cta">Get Started</a>
+        </div>
+        
+        <div class="pricing-plan glass">
+          <h3 class="plan-name">Agency</h3>
+          <div class="plan-price" id="enterprise-price">$1,499</div>
+          <div class="plan-billing" id="enterprise-billing">per month</div>
+          
+          <ul class="plan-features">
+            <li class="plan-feature">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span>Up to 10 OnlyFans Accounts</span>
+            </li>
+            <li class="plan-feature">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span>Unlimited Subscribers</span>
+            </li>
+            <li class="plan-feature">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span>Enterprise Analytics Dashboard</span>
+            </li>
+            <li class="plan-feature">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span>24/7 Dedicated Support</span>
+            </li>
+            <li class="plan-feature">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span>White-label Solution</span>
+            </li>
+            <li class="plan-feature">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span>API Access</span>
+            </li>
+          </ul>
+          
+          <a href="#" class="btn btn-secondary plan-cta">Contact Sales</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Testimonials Section -->
+  <section class="section testimonials" id="testimonials">
+    <div class="container section-inner">
+      <h2 class="section-title">Success Stories</h2>
+      <p class="section-subtitle">Hear from creators who transformed their OnlyFans business with AuraAI.</p>
+      
+      <div class="testimonials-container">
+        <div class="testimonials-track" id="testimonials-track">
+          <div class="testimonial active">
+            <div class="testimonial-card glass">
+              <p class="testimonial-content">"I was spending $2,000 a month on chatters with inconsistent results. After switching to AuraAI, I'm not only saving $1,500 monthly, but my fans are raving about how responsive I am. My PPV sales have increased by 78% and subscriber retention is at an all-time high!"</p>
+              <div class="testimonial-author">
+                <div class="author-avatar">
+                  <img src="/api/placeholder/50/50" alt="Mia L." />
+                </div>
+                <div class="author-info">
+                  <h4>Mia L.</h4>
+                  <p>Top 0.4% Creator</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="testimonial">
+            <div class="testimonial-card glass">
+              <p class="testimonial-content">"As an agency managing 12 OnlyFans accounts, finding reliable chatters with good English was a constant headache. AuraAI has been revolutionary - our models are making more money, subscribers are happier, and we've eliminated the drama that comes with human chatters. Best business decision we've made!"</p>
+              <div class="testimonial-author">
+                <div class="author-avatar">
+                  <img src="/api/placeholder/50/50" alt="Alex R." />
+                </div>
+                <div class="author-info">
+                  <h4>Alex R.</h4>
+                  <p>OnlyFans Management Agency</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="testimonial">
+            <div class="testimonial-card glass">
+              <p class="testimonial-content">"I was working 14-hour days trying to keep up with messages while creating content. AuraAI has given me my life back while actually improving my income. The AI remembers details about my subscribers that I would forget, making them feel special. My monthly revenue has increased by 42% with less effort!"</p>
+              <div class="testimonial-author">
+                <div class="author-avatar">
+                  <img src="/api/placeholder/50/50" alt="Jessica K." />
+                </div>
+                <div class="author-info">
+                  <h4>Jessica K.</h4>
+                  <p>Independent Creator</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="testimonial-controls" id="testimonial-controls">
+        <div class="testimonial-dot active" data-index="0"></div>
+        <div class="testimonial-dot" data-index="1"></div>
+        <div class="testimonial-dot" data-index="2"></div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- FAQ Section -->
+  <section class="section faq" id="faq">
+    <div class="container section-inner">
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <p class="section-subtitle">Find answers to common questions about AuraAI for OnlyFans.</p>
+      
+      <div class="faq-container">
+        <div class="faq-item active" id="faq-1">
+          <div class="faq-question">
+            <h3>Is AuraAI against OnlyFans terms of service?</h3>
+            <div class="faq-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 5V19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+          <div class="faq-answer">
+            <p>No. AuraAI operates similar to hiring chat assistants, which is a common practice. Our system securely integrates with OnlyFans' official API where available, and uses advanced methods that respect platform policies where API access is limited.</p>
+          </div>
+        </div>
+        
+        <div class="faq-item" id="faq-2">
+          <div class="faq-question">
+            <h3>How natural do the AI conversations sound?</h3>
+            <div class="faq-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 5V19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+          <div class="faq-answer">
+            <p>Incredibly natural. Our AI is trained on millions of conversations and customized to match your unique communication style. Subscribers consistently report they can't tell the difference between the AI and the creator. The AI learns from your previous messages and content to maintain authentic, on-brand communication.</p>
+          </div>
+        </div>
+        
+        <div class="faq-item" id="faq-3">
+          <div class="faq-question">
+            <h3>How much time will I save using AuraAI?</h3>
+            <div class="faq-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 5V19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+          <div class="faq-answer">
+            <p>Most creators report saving 20-30 hours per week on subscriber messaging. The exact time savings depend on your subscriber count and engagement rate. Our customers typically see a 90% reduction in time spent on routine conversations while actually increasing revenue.</p>
+          </div>
+        </div>
+        
+        <div class="faq-item" id="faq-4">
+          <div class="faq-question">
+            <h3>Is my account information secure?</h3>
+            <div class="faq-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 5V19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+          <div class="faq-answer">
+            <p>Absolutely. Security is our top priority. We use military-grade encryption and never store your OnlyFans password. Our integration uses secure authentication methods that comply with the highest security standards. All data is encrypted both in transit and at rest, and we are fully GDPR compliant.</p>
+          </div>
+        </div>
+        
+        <div class="faq-item" id="faq-5">
+          <div class="faq-question">
+            <h3>Can I still chat personally when I want to?</h3>
+            <div class="faq-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 5V19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+          <div class="faq-answer">
+            <p>Yes! You have complete control over when the AI is active. You can set rules for which types of messages the AI should handle and which should be flagged for your personal attention. You can also seamlessly take over any conversation at any time. The system is designed to enhance your presence, not replace it.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- CTA Section -->
+  <section class="section cta" id="cta">
+    <div class="container section-inner">
+      <div class="cta-card glass">
+        <div class="cta-content">
+          <h2 class="cta-title">Ready to Scale Your OnlyFans Business?</h2>
+          <p class="cta-subtitle">Join top creators who are saving time, reducing costs, and increasing revenue with AuraAI's perfect English and lightning-fast responses.</p>
+          <div class="cta-buttons">
+            <a href="#" class="btn btn-primary btn-cta" id="signup-btn">Start 7-Day Free Trial</a>
+            <a href="#" class="btn btn-secondary btn-cta" id="demo-btn">Request Demo</a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="cta-blob-1"></div>
+      <div class="cta-blob-2"></div>
+    </div>
+  </section>
+  
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-info">
+          <div class="footer-logo">
+            <a href="#" class="logo">
+              <div class="logo-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M2 17L12 22L22 17" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M2 12L12 17L22 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="logo-text">AuraAI</div>
+            </a>
+          </div>
+          <p class="footer-description">Advanced AI-powered OnlyFans chat automation that helps creators scale their engagement, improve subscriber retention, and maximize revenue.</p>
+        </div>
+        
+        <div class="footer-links-columns">
+          <div class="footer-links-column">
+            <h4 class="footer-links-title">Product</h4>
+            <ul class="footer-links">
+              <li class="footer-link"><a href="#features">Features</a></li>
+              <li class="footer-link"><a href="#pricing">Pricing</a></li>
+              <li class="footer-link"><a href="#testimonials">Testimonials</a></li>
+              <li class="footer-link"><a href="#faq">FAQ</a></li>
+            </ul>
+          </div>
+          
+          <div class="footer-links-column">
+            <h4 class="footer-links-title">Company</h4>
+            <ul class="footer-links">
+              <li class="footer-link"><a href="#">About Us</a></li>
+              <li class="footer-link"><a href="#">Case Studies</a></li>
+              <li class="footer-link"><a href="#">Blog</a></li>
+              <li class="footer-link"><a href="#">Contact</a></li>
+            </ul>
+          </div>
+          
+          <div class="footer-links-column">
+            <h4 class="footer-links-title">Resources</h4>
+            <ul class="footer-links">
+              <li class="footer-link"><a href="#">Help Center</a></li>
+              <li class="footer-link"><a href="#">Creator Academy</a></li>
+              <li class="footer-link"><a href="#">API Documentation</a></li>
+              <li class="footer-link"><a href="#">Community</a></li>
+            </ul>
+          </div>
+          
+          <div class="footer-links-column">
+            <h4 class="footer-links-title">Legal</h4>
+            <ul class="footer-links">
+              <li class="footer-link"><a href="#">Privacy Policy</a></li>
+              <li class="footer-link"><a href="#">Terms of Service</a></li>
+              <li class="footer-link"><a href="#">Cookie Policy</a></li>
+              <li class="footer-link"><a href="#">GDPR Compliance</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <div class="copyright">
+          &copy; 2025 AuraAI. All rights reserved.
+        </div>
+        
+        <div class="footer-social">
+          <a href="#" class="social-icon glass">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18 2H15C13.6739 2 12.4021 2.52678 11.4645 3.46447C10.5268 4.40215 10 5.67392 10 7V10H7V14H10V22H14
