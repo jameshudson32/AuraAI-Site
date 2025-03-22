@@ -1,0 +1,1658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - AuraAI</title>
+  <style>
+    /* Modern Apple-inspired Design System with Enhanced Glassmorphism */
+    :root {
+      /* Core colors */
+      --bg-primary: #000000;
+      --bg-secondary: #0a0a0a;
+      --bg-tertiary: #1a1a1a;
+      --accent-primary: #2f7fff;
+      --accent-secondary: #46a6ff;
+      --accent-glow: rgba(47, 127, 255, 0.3);
+      --text-primary: #ffffff;
+      --text-secondary: rgba(255, 255, 255, 0.7);
+      --text-tertiary: rgba(255, 255, 255, 0.5);
+      --success: #2ecc71;
+      --success-glow: rgba(46, 204, 113, 0.3);
+      --warning: #f39c12;
+      --danger: #e74c3c;
+      --danger-glow: rgba(231, 76, 60, 0.3);
+      
+      /* Spacing */
+      --spacing-xs: 4px;
+      --spacing-sm: 8px;
+      --spacing-md: 16px;
+      --spacing-lg: 24px;
+      --spacing-xl: 32px;
+      --spacing-xxl: 48px;
+      --spacing-xxxl: 64px;
+      
+      /* Typography */
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      
+      /* Radii */
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-full: 9999px;
+      
+      /* Z-index layers */
+      --z-navbar: 100;
+      --z-modal: 200;
+      
+      /* Enhanced Glass effects */
+      --glass-bg: rgba(10, 10, 10, 0.4);
+      --glass-border: rgba(255, 255, 255, 0.15);
+      --glass-blur: 15px;
+      --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      --glass-highlight: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.15) 0%,
+        rgba(255, 255, 255, 0.05) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 20% 20%, rgba(70, 166, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(46, 204, 113, 0.08) 0%, transparent 50%);
+      background-attachment: fixed;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Typography */
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    h2 {
+      font-size: 1.8rem;
+      margin-bottom: var(--spacing-md);
+    }
+    
+    h3 {
+      font-size: 1.4rem;
+      margin-bottom: var(--spacing-md);
+    }
+    
+    p {
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: var(--spacing-md);
+    }
+    
+    a {
+      color: var(--accent-primary);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    
+    a:hover {
+      color: var(--accent-secondary);
+    }
+    
+    /* Container */
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--spacing-lg);
+    }
+    
+    /* Dashboard Layout */
+    .dashboard {
+      display: flex;
+      min-height: 100vh;
+    }
+    
+    /* Sidebar */
+    .sidebar {
+      width: 260px;
+      background-color: rgba(10, 10, 10, 0.7);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border-right: 1px solid var(--glass-border);
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: var(--z-navbar);
+      transition: transform 0.3s ease;
+    }
+    
+    .sidebar-header {
+      padding: var(--spacing-lg);
+      border-bottom: 1px solid var(--glass-border);
+      display: flex;
+      align-items: center;
+    }
+    
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+    }
+    
+    .sidebar-logo-icon {
+      width: 32px;
+      height: 32px;
+      margin-right: var(--spacing-sm);
+    }
+    
+    .sidebar-logo-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    
+    .sidebar-logo-text {
+      font-size: 20px;
+      font-weight: 600;
+    }
+    
+    .sidebar-menu {
+      padding: var(--spacing-lg) 0;
+    }
+    
+    .sidebar-section {
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .sidebar-section-title {
+      padding: 0 var(--spacing-lg);
+      margin-bottom: var(--spacing-sm);
+      color: var(--text-tertiary);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .sidebar-nav {
+      list-style: none;
+    }
+    
+    .sidebar-nav-item {
+      margin-bottom: 2px;
+    }
+    
+    .sidebar-nav-link {
+      display: flex;
+      align-items: center;
+      padding: var(--spacing-sm) var(--spacing-lg);
+      color: var(--text-secondary);
+      transition: all 0.2s ease;
+      border-left: 3px solid transparent;
+    }
+    
+    .sidebar-nav-link:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+      color: var(--text-primary);
+    }
+    
+    .sidebar-nav-link.active {
+      background-color: rgba(47, 127, 255, 0.1);
+      color: var(--text-primary);
+      border-left-color: var(--accent-primary);
+    }
+    
+    .sidebar-icon {
+      width: 20px;
+      height: 20px;
+      margin-right: var(--spacing-md);
+      opacity: 0.8;
+    }
+    
+    .sidebar-nav-link:hover .sidebar-icon,
+    .sidebar-nav-link.active .sidebar-icon {
+      opacity: 1;
+    }
+    
+    .sidebar-toggle {
+      display: none;
+      position: fixed;
+      top: var(--spacing-md);
+      left: var(--spacing-md);
+      z-index: calc(var(--z-navbar) + 1);
+      background-color: rgba(26, 26, 26, 0.8);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-sm);
+      cursor: pointer;
+    }
+    
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      margin-left: 260px;
+      padding: var(--spacing-lg);
+      transition: margin-left 0.3s ease;
+    }
+    
+    .main-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--spacing-xl);
+      padding-bottom: var(--spacing-md);
+      border-bottom: 1px solid var(--glass-border);
+    }
+    
+    .main-title {
+      margin-bottom: 0;
+    }
+    
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+      position: relative;
+    }
+    
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--accent-glow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: var(--text-primary);
+      border: 2px solid var(--accent-primary);
+    }
+    
+    .user-name {
+      font-weight: 500;
+    }
+    
+    .user-role {
+      font-size: 0.8rem;
+      color: var(--text-tertiary);
+    }
+    
+    /* Dashboard Cards Grid */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: var(--spacing-lg);
+      margin-bottom: var(--spacing-xl);
+    }
+    
+    .dashboard-card {
+      background-color: rgba(26, 26, 26, 0.5);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border-radius: var(--radius-md);
+      padding: var(--spacing-lg);
+      border: 1px solid var(--glass-border);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .dashboard-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 200%;
+      height: 1px;
+      background: linear-gradient(90deg, 
+                               transparent, 
+                               rgba(255, 255, 255, 0.3), 
+                               transparent);
+    }
+    
+    .dashboard-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, 
+                              rgba(255, 255, 255, 0.1) 0%, 
+                              rgba(255, 255, 255, 0) 100%);
+      pointer-events: none;
+    }
+    
+    .dashboard-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      border-color: rgba(47, 127, 255, 0.3);
+    }
+    
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: var(--spacing-md);
+    }
+    
+    .card-title {
+      font-size: 1.1rem;
+      margin-bottom: var(--spacing-xs);
+    }
+    
+    .card-subtitle {
+      font-size: 0.9rem;
+      color: var(--text-tertiary);
+      margin-bottom: 0;
+    }
+    
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, var(--accent-primary), rgba(70, 166, 255, 0.5));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(47, 127, 255, 0.2);
+    }
+    
+    .card-icon svg {
+      width: 20px;
+      height: 20px;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    }
+    
+    .card-value {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: var(--spacing-sm);
+    }
+    
+    .card-change {
+      display: flex;
+      align-items: center;
+      font-size: 0.9rem;
+    }
+    
+    .card-change-positive {
+      color: var(--success);
+    }
+    
+    .card-change-negative {
+      color: var(--danger);
+    }
+    
+    .card-change svg {
+      width: 16px;
+      height: 16px;
+      margin-right: var(--spacing-xs);
+    }
+    
+    /* License Key Section */
+    .license-section {
+      background-color: rgba(26, 26, 26, 0.5);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border-radius: var(--radius-md);
+      padding: var(--spacing-xl);
+      border: 1px solid var(--glass-border);
+      margin-bottom: var(--spacing-xl);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .license-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 200%;
+      height: 1px;
+      background: linear-gradient(90deg, 
+                               transparent, 
+                               rgba(255, 255, 255, 0.3), 
+                               transparent);
+    }
+    
+    .license-section::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, 
+                              rgba(255, 255, 255, 0.1) 0%, 
+                              rgba(255, 255, 255, 0) 100%);
+      pointer-events: none;
+    }
+    
+    .license-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .license-title {
+      margin-bottom: 0;
+    }
+    
+    .license-key-container {
+      background-color: rgba(10, 10, 10, 0.5);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-lg);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .license-key {
+      font-family: monospace;
+      font-size: 1.2rem;
+      letter-spacing: 2px;
+    }
+    
+    .license-key-segment {
+      color: var(--text-primary);
+    }
+    
+    .license-copy-btn {
+      background: none;
+      border: none;
+      color: var(--accent-primary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      padding: var(--spacing-sm);
+      border-radius: var(--radius-sm);
+      transition: all 0.2s ease;
+    }
+    
+    .license-copy-btn:hover {
+      background-color: rgba(47, 127, 255, 0.1);
+    }
+    
+    .license-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--spacing-lg);
+    }
+    
+    .license-info-item {
+      background-color: rgba(10, 10, 10, 0.4);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-md);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .license-info-label {
+      font-size: 0.9rem;
+      color: var(--text-tertiary);
+      margin-bottom: var(--spacing-xs);
+    }
+    
+    .license-info-value {
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+    
+    .license-status {
+      display: inline-flex;
+      align-items: center;
+      padding: var(--spacing-xs) var(--spacing-sm);
+      border-radius: var(--radius-sm);
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    
+    .license-status-active {
+      background-color: rgba(46, 204, 113, 0.15);
+      color: var(--success);
+    }
+    
+    .license-status-expired {
+      background-color: rgba(231, 76, 60, 0.15);
+      color: var(--danger);
+    }
+    
+    /* Download Section */
+    .download-section {
+      margin-bottom: var(--spacing-xl);
+    }
+    
+    .download-header {
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .download-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: var(--spacing-lg);
+    }
+    
+    .download-card {
+      background-color: rgba(26, 26, 26, 0.5);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border-radius: var(--radius-md);
+      padding: var(--spacing-xl);
+      border: 1px solid var(--glass-border);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .download-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 200%;
+      height: 1px;
+      background: linear-gradient(90deg, 
+                               transparent, 
+                               rgba(255, 255, 255, 0.3), 
+                               transparent);
+    }
+    
+    .download-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, 
+                              rgba(255, 255, 255, 0.1) 0%, 
+                              rgba(255, 255, 255, 0) 100%);
+      pointer-events: none;
+    }
+    
+    .download-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      border-color: rgba(47, 127, 255, 0.3);
+    }
+    
+    .download-icon {
+      width: 60px;
+      height: 60px;
+      margin-bottom: var(--spacing-md);
+    }
+    
+    .download-title {
+      font-size: 1.2rem;
+      margin-bottom: var(--spacing-sm);
+    }
+    
+    .download-description {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      margin-bottom: var(--spacing-lg);
+      flex: 1;
+    }
+    
+    .download-version {
+      font-size: 0.9rem;
+      color: var(--text-tertiary);
+      margin-bottom: var(--spacing-md);
+    }
+    
+    .download-btn {
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      color: var(--text-primary);
+      border: none;
+      border-radius: var(--radius-md);
+      padding: var(--spacing-md) var(--spacing-lg);
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-sm);
+      transition: all 0.2s ease;
+    }
+    
+    .download-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(47, 127, 255, 0.3);
+    }
+    
+    /* Device Pairing Section */
+    .devices-section {
+      background-color: rgba(26, 26, 26, 0.5);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border-radius: var(--radius-md);
+      padding: var(--spacing-xl);
+      border: 1px solid var(--glass-border);
+      margin-bottom: var(--spacing-xl);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .devices-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 200%;
+      height: 1px;
+      background: linear-gradient(90deg, 
+                               transparent, 
+                               rgba(255, 255, 255, 0.3), 
+                               transparent);
+    }
+    
+    .devices-section::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, 
+                              rgba(255, 255, 255, 0.1) 0%, 
+                              rgba(255, 255, 255, 0) 100%);
+      pointer-events: none;
+    }
+    
+    .devices-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .devices-title {
+      margin-bottom: 0;
+    }
+    
+    .pair-device-btn {
+      background-color: rgba(47, 127, 255, 0.1);
+      color: var(--accent-primary);
+      border: 1px solid rgba(47, 127, 255, 0.3);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-sm) var(--spacing-md);
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      transition: all 0.2s ease;
+    }
+    
+    .pair-device-btn:hover {
+      background-color: rgba(47, 127, 255, 0.15);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(47, 127, 255, 0.15);
+    }
+    
+    .devices-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: var(--spacing-lg);
+    }
+    
+    .device-card {
+      background-color: rgba(10, 10, 10, 0.4);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-lg);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-md);
+    }
+    
+    .device-header {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+    }
+    
+    .device-icon {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(47, 127, 255, 0.1);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-sm);
+    }
+    
+    .device-info {
+      flex: 1;
+    }
+    
+    .device-name {
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+    
+    .device-id {
+      font-size: 0.8rem;
+      color: var(--text-tertiary);
+    }
+    
+    .device-status {
+      font-size: 0.8rem;
+      padding: var(--spacing-xs) var(--spacing-sm);
+      border-radius: var(--radius-sm);
+      align-self: flex-start;
+    }
+    
+    .device-active {
+      background-color: rgba(46, 204, 113, 0.15);
+      color: var(--success);
+    }
+    
+    .device-inactive {
+      background-color: rgba(189, 195, 199, 0.15);
+      color: var(--text-tertiary);
+    }
+    
+    .device-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--spacing-sm);
+      font-size: 0.9rem;
+    }
+    
+    .device-detail-label {
+      color: var(--text-tertiary);
+    }
+    
+    .device-detail-value {
+      color: var(--text-secondary);
+      text-align: right;
+    }
+    
+    .device-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: var(--spacing-sm);
+    }
+    
+    .device-action-btn {
+      background: none;
+      border: none;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      padding: var(--spacing-xs) var(--spacing-sm);
+      border-radius: var(--radius-sm);
+      transition: all 0.2s ease;
+    }
+    
+    .device-action-btn:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+      color: var(--text-primary);
+    }
+    
+    .device-action-btn.remove {
+      color: var(--danger);
+    }
+    
+    .device-action-btn.remove:hover {
+      background-color: rgba(231, 76, 60, 0.1);
+    }
+    
+    /* Billing Section */
+    .billing-section {
+      background-color: rgba(26, 26, 26, 0.5);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border-radius: var(--radius-md);
+      padding: var(--spacing-xl);
+      border: 1px solid var(--glass-border);
+      margin-bottom: var(--spacing-xl);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .billing-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 200%;
+      height: 1px;
+      background: linear-gradient(90deg, 
+                               transparent, 
+                               rgba(255, 255, 255, 0.3), 
+                               transparent);
+    }
+    
+    .billing-section::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, 
+                              rgba(255, 255, 255, 0.1) 0%, 
+                              rgba(255, 255, 255, 0) 100%);
+      pointer-events: none;
+    }
+    
+    .billing-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .billing-title {
+      margin-bottom: 0;
+    }
+    
+    .subscription-card {
+      background-color: rgba(10, 10, 10, 0.4);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-lg);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .subscription-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--spacing-md);
+      padding-bottom: var(--spacing-md);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .subscription-plan {
+      font-weight: 600;
+      font-size: 1.2rem;
+    }
+    
+    .subscription-status {
+      font-size: 0.8rem;
+      padding: var(--spacing-xs) var(--spacing-sm);
+      border-radius: var(--radius-sm);
+    }
+    
+    .subscription-status.active {
+      background-color: rgba(46, 204, 113, 0.15);
+      color: var(--success);
+    }
+    
+    .subscription-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--spacing-lg);
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .subscription-detail {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .subscription-detail-label {
+      font-size: 0.9rem;
+      color: var(--text-tertiary);
+      margin-bottom: var(--spacing-xs);
+    }
+    
+    .subscription-detail-value {
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+    
+    .subscription-actions {
+      display: flex;
+      gap: var(--spacing-md);
+    }
+    
+    .subscription-btn {
+      background-color: rgba(26, 26, 26, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-secondary);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-sm) var(--spacing-lg);
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .subscription-btn:hover {
+      background-color: rgba(47, 127, 255, 0.1);
+      color: var(--text-primary);
+      border-color: rgba(47, 127, 255, 0.3);
+    }
+    
+    .subscription-btn.upgrade {
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      border: none;
+      color: var(--text-primary);
+    }
+    
+    .subscription-btn.upgrade:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(47, 127, 255, 0.3);
+    }
+    
+    .payment-methods {
+      margin-top: var(--spacing-xl);
+    }
+    
+    .payment-methods-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--spacing-md);
+    }
+    
+    .payment-methods-title {
+      font-size: 1.2rem;
+      margin-bottom: 0;
+    }
+    
+    .add-payment-btn {
+      background-color: rgba(26, 26, 26, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-secondary);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-sm) var(--spacing-md);
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      transition: all 0.2s ease;
+    }
+    
+    .add-payment-btn:hover {
+      background-color: rgba(47, 127, 255, 0.1);
+      color: var(--text-primary);
+      border-color: rgba(47, 127, 255, 0.3);
+    }
+    
+    .payment-methods-list {
+      background-color: rgba(10, 10, 10, 0.4);
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      overflow: hidden;
+    }
+    
+    .payment-method {
+      display: flex;
+      align-items: center;
+      padding: var(--spacing-md);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .payment-method:last-child {
+      border-bottom: none;
+    }
+    
+    .payment-method-icon {
+      width: 40px;
+      height: 30px;
+      margin-right: var(--spacing-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .payment-method-icon img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+    
+    .payment-method-info {
+      flex: 1;
+    }
+    
+    .payment-method-name {
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+    
+    .payment-method-details {
+      font-size: 0.9rem;
+      color: var(--text-tertiary);
+    }
+    
+    .payment-method-default {
+      font-size: 0.8rem;
+      padding: var(--spacing-xs) var(--spacing-sm);
+      border-radius: var(--radius-sm);
+      background-color: rgba(46, 204, 113, 0.15);
+      color: var(--success);
+      margin-right: var(--spacing-md);
+    }
+    
+    .payment-method-actions {
+      display: flex;
+      gap: var(--spacing-sm);
+    }
+    
+    .payment-method-btn {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      cursor: pointer;
+      padding: var(--spacing-xs) var(--spacing-sm);
+      border-radius: var(--radius-sm);
+      transition: all 0.2s ease;
+    }
+    
+    .payment-method-btn:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+      color: var(--text-primary);
+    }
+    
+    .payment-method-btn.remove {
+      color: var(--danger);
+    }
+    
+    .payment-method-btn.remove:hover {
+      background-color: rgba(231, 76, 60, 0.1);
+    }
+    
+    /* Responsive Layout */
+    @media (max-width: 991px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      
+      .sidebar.active {
+        transform: translateX(0);
+      }
+      
+      .main-content {
+        margin-left: 0;
+      }
+      
+      .sidebar-toggle {
+        display: block;
+      }
+      
+      .devices-header,
+      .billing-header,
+      .license-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-md);
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .license-info,
+      .devices-list,
+      .subscription-details {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .main-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-md);
+      }
+      
+      .subscription-actions {
+        flex-direction: column;
+        width: 100%;
+      }
+      
+      .subscription-btn {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Mobile Sidebar Toggle -->
+  <button class="sidebar-toggle" id="sidebar-toggle">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M3 12H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M3 6H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+  
+  <!-- Dashboard Layout -->
+  <div class="dashboard">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">
+            <img src="https://i.imgur.com/8GObyDN.png" alt="AuraAI Logo">
+          </div>
+          <div class="sidebar-logo-text">AuraAI</div>
+        </a>
+      </div>
+      
+      <div class="sidebar-menu">
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">Main</div>
+          <ul class="sidebar-nav">
+            <li class="sidebar-nav-item">
+              <a href="#" class="sidebar-nav-link active">
+                <svg class="sidebar-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Dashboard
+              </a>
+            </li>
+            <li class="sidebar-nav-item">
+              <a href="#" class="sidebar-nav-link">
+                <svg class="sidebar-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M20 7H4C2.89543 7 2 7.89543 2 9V19C2 20.1046 2.89543 21 4 21H20C21.1046 21 22 20.1046 22 19V9C22 7.89543 21.1046 7 20 7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M16 21V5C16 4.46957 15.7893 3.96086 15.4142 3.58579C15.0391 3.21071 14.5304 3 14 3H10C9.46957 3 8.96086 3.21071 8.58579 3.58579C8.21071 3.96086 8 4.46957 8 5V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                OnlyFans Accounts
+              </a>
+            </li>
+            <li class="sidebar-nav-item">
+              <a href="#" class="sidebar-nav-link">
+                <svg class="sidebar-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Messages
+              </a>
+            </li>
+            <li class="sidebar-nav-item">
+              <a href="#" class="sidebar-nav-link">
+                <svg class="sidebar-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M20 11C20 12.8565 19.5308 14.6802 18.6518 16.2901C17.7727 17.9 16.5233 19.2375 15 20.1224C13.4767 19.2375 12.2273 17.9 11.3482 16.2901C10.4692 14.6802 10 12.8565 10 11V5L20 2V11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M15 2V20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M10 11C10 12.8565 9.53079 14.6802 8.65176 16.2901C7.77273 17.9 6.52331 19.2375 5 20.1224" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Performance
+              </a>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">Settings</div>
+          <ul class="sidebar-nav">
+            <li class="sidebar-nav-item">
+              <a href="#license-section" class="sidebar-nav-link">
+                <svg class="sidebar-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 12L11 14L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M20 12C20 14.1217 19.1571 16.1566 17.6569 17.6569C16.1566 19.1571 14.1217 20 12 20C9.87827 20 7.84344 19.1571 6.34315 17.6569C4.84285 16.1566 4 14.1217 4 12C4 9.87827 4.84285 7.84344 6.34315 6.34315C7.84344 4.84285 9.87827 4 12 4C14.1217 4 16.1566 4.84285 17.6569 6.34315C19.1571 7.84344 20 9.87827 20 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                License & Activation
+              </a>
+            </li>
+            <li class="sidebar-nav-item">
+              <a href="#devices-section" class="sidebar-nav-link">
+                <svg class="sidebar-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M17 2H7C5.89543 2 5 2.89543 5 4V20C5 21.1046 5.89543 22 7 22H17C18.1046 22 19 21.1046 19 20V4C19 2.89543 18.1046 2 17 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M12 18H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Device Pairing
+              </a>
+            </li>
+            <li class="sidebar-nav-item">
+              <a href="#billing-section" class="sidebar-nav-link">
+                <svg class="sidebar-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M21 4H3C1.89543 4 1 4.89543 1 6V18C1 19.1046 1.89543 20 3 20H21C22.1046 20 23 19.1046 23 18V6C23 4.89543 22.1046 4 21 4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M1 10H23" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Billing & Subscription
+              </a>
+            </li>
+            <li class="sidebar-nav-item">
+              <a href="#" class="sidebar-nav-link">
+                <svg class="sidebar-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M19.4 15C19.2669 15.3016 19.2272 15.6362 19.286 15.9606C19.3448 16.285 19.4995 16.5843 19.73 16.82L19.79 16.88C19.976 17.0657 20.1235 17.2863 20.2241 17.5291C20.3248 17.7719 20.3766 18.0322 20.3766 18.295C20.3766 18.5578 20.3248 18.8181 20.2241 19.0609C20.1235 19.3037 19.976 19.5243 19.79 19.71C19.6043 19.896 19.3837 20.0435 19.1409 20.1441C18.8981 20.2448 18.6378 20.2966 18.375 20.2966C18.1122 20.2966 17.8519 20.2448 17.6091 20.1441C17.3663 20.0435 17.1457 19.896 16.96 19.71L16.9 19.65C16.6643 19.4195 16.365 19.2648 16.0406 19.206C15.7162 19.1472 15.3816 19.1869 15.08 19.32C14.7842 19.4468 14.532 19.6572 14.3543 19.9255C14.1766 20.1938 14.0813 20.5082 14.08 20.83V21C14.08 21.5304 13.8693 22.0391 13.4942 22.4142C13.1191 22.7893 12.6104 23 12.08 23C11.5496 23 11.0409 22.7893 10.6658 22.4142C10.2907 22.0391 10.08 21.5304 10.08 21V20.91C10.0723 20.579 9.96512 20.258 9.77251 19.9887C9.5799 19.7194 9.31074 19.5143 9 19.4C8.69838 19.2669 8.36381 19.2272 8.03941 19.286C7.71502 19.3448 7.41568 19.4995 7.18 19.73L7.12 19.79C6.93425 19.976 6.71368 20.1235 6.47088 20.2241C6.22808 20.3248 5.96783 20.3766 5.705 20.3766C5.44217 20.3766 5.18192 20.3248 4.93912 20.2241C4.69632 20.1235 4.47575 19.976 4.29 19.79C4.10405 19.6043 3.95653 19.3837 3.85588 19.1409C3.75523 18.8981 3.70343 18.6378 3.70343 18.375C3.70343 18.1122 3.75523 17.8519 3.85588 17.6091C3.95653 17.3663 4.10405 17.1457 4.29 16.96L4.35 16.9C4.58054 16.6643 4.73519 16.365 4.794 16.0406C4.85282 15.7162 4.81312 15.3816 4.68 15.08C4.55324 14.7842 4.34276 14.532 4.07447 14.3543C3.80618 14.1766 3.49179 14.0813 3.17 14.08H3C2.46957 14.08 1.96086 13.8693 1.58579 13.4942C1.21071 13.1191 1 12.6104 1 12.08C1 11.5496 1.21071 11.0409 1.58579 10.6658C1.96086 10.2907 2.46957 10.08 3 10.08H3.09C3.42099 10.0723 3.742 9.96512 4.0113 9.77251C4.28059 9.5799 4.48572 9.31074 4.6 9C4.73312 8.69838 4.77282 8.36381 4.714 8.03941C4.65519 7.71502 4.50054 7.41568 4.27 7.18L4.21 7.12C4.02405 6.93425 3.87653 6.71368 3.77588 6.47088C3.67523 6.22808 3.62343 5.96783 3.62343 5.705C3.62343 5.44217 3.67523 5.18192 3.77588 4.93912C3.87653 4.69632 4.02405 4.47575 4.21 4.29C4.39575 4.10405 4.61632 3.95653 4.85912 3.85588C5.10192 3.75523 5.36217 3.70343 5.625 3.70343C5.88783 3.70343 6.14808 3.75523 6.39088 3.85588C6.63368 3.95653 6.85425 4.10405 7.04 4.29L7.1 4.35C7.33568 4.58054 7.63502 4.73519 7.95941 4.794C8.28381 4.85282 8.61838 4.81312 8.92 4.68H9C9.29577 4.55324 9.54802 4.34276 9.72569 4.07447C9.90337 3.80618 9.99872 3.49179 10 3.17V3C10 2.46957 10.2107 1.96086 10.5858 1.58579C10.9609 1.21071 11.4696 1 12 1C12.5304 1 13.0391 1.21071 13.4142 1.58579C13.7893 1.96086 14 2.46957 14 3V3.09C14.0013 3.41179 14.0966 3.72618 14.2743 3.99447C14.452 4.26276 14.7042 4.47324 15 4.6C15.3016 4.73312 15.6362 4.77282 15.9606 4.714C16.285 4.65519 16.5843 4.50054 16.82 4.27L16.88 4.21C17.0657 4.02405 17.2863 3.87653 17.5291 3.77588C17.7719 3.67523 18.0322 3.62343 18.295 3.62343C18.5578 3.62343 18.8181 3.67523 19.0609 3.77588C19.3037 3.87653 19.5243 4.02405 19.71 4.21C19.896 4.39575 20.0435 4.61632 20.1441 4.85912C20.2448 5.10192 20.2966 5.36217 20.2966 5.625C20.2966 5.88783 20.2448 6.14808 20.1441 6.39088C20.0435 6.63368 19.896 6.85425 19.71 7.04L19.65 7.1C19.4195 7.33568 19.2648 7.63502 19.206 7.95941C19.1472 8.28381 19.1869 8.61838 19.32 8.92V9C19.4468 9.29577 19.6572 9.54802 19.9255 9.72569C20.1938 9.90337 20.5082 9.99872 20.83 10H21C21.5304 10 22.0391 10.2107 22.4142 10.5858C22.7893 10.9609 23 11.4696 23 12C23 12.5304 22.7893 13.0391 22.4142 13.4142C22.0391 13.7893 21.5304 14 21 14H20.91C20.5882 14.0013 20.2738 14.0966 20.0055 14.2743C19.7372 14.452 19.5268 14.7042 19.4 15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Settings
+              </a>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">Support</div>
+          <ul class="sidebar-nav">
+            <li class="sidebar-nav-item">
+              <a href="#" class="sidebar-nav-link">
+                <svg class="sidebar-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9.09 9C9.3251 8.33167 9.78915 7.76811 10.4 7.40913C11.0108 7.05016 11.7289 6.91894 12.4272 7.03871C13.1255 7.15849 13.7588 7.52152 14.2151 8.06353C14.6713 8.60553 14.9211 9.29152 14.92 10C14.92 12 11.92 13 11.92 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M12 17H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Help & Support
+              </a>
+            </li>
+            <li class="sidebar-nav-item">
+              <a href="#" class="sidebar-nav-link">
+                <svg class="sidebar-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M13 16H12V12H11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M12 8H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M17.1213 19.364L19.2426 21.4853C19.433 21.6757 19.6606 21.828 19.9104 21.9338C20.1603 22.0396 20.4275 22.0973 20.6985 22.104C20.9695 22.1107 21.2391 22.0661 21.494 21.9728C21.7489 21.8795 21.9841 21.7391 22.1838 21.5593C22.3835 21.3794 22.544 21.1631 22.6574 20.9232C22.7707 20.6834 22.8347 20.4248 22.8456 20.161C22.8566 19.8973 22.8143 19.6339 22.7211 19.3844C22.6279 19.1349 22.4856 18.9039 22.3033 18.7066L20.182 16.5853C19.9894 16.3936 19.7614 16.2431 19.5109 16.1425C19.2603 16.0419 18.992 15.9932 18.7213 15.9992C18.4505 16.0052 18.185 16.0657 17.9395 16.1774C17.694 16.2892 17.4734 16.4496 17.2899 16.65L16.8033 17.1366C15.9567 16.8416 15.1737 16.3913 14.4947 15.8117C13.8156 15.232 13.2525 14.5326 12.8366 13.75L13.3233 13.2633C13.5238 13.0798 13.6842 12.8592 13.7959 12.6137C13.9076 12.3682 13.9682 12.1027 13.9742 11.8319C13.9801 11.5611 13.9315 11.2929 13.8308 11.0423C13.7302 10.7918 13.5797 10.5638 13.388 10.3713L11.2667 8.25C11.0693 8.06775 10.8384 7.92535 10.5889 7.83218C10.3394 7.73901 10.076 7.69671 9.8123 7.70765C9.54857 7.7186 9.28995 7.78262 9.05014 7.89598C8.81032 8.00935 8.594 8.16982 8.41413 8.36951C8.23426 8.56919 8.09387 8.80443 8.00058 9.05935C7.90729 9.31426 7.86273 9.58382 7.86945 9.8548C7.87616 10.1258 7.93393 10.3929 8.03973 10.6428C8.14552 10.8927 8.29777 11.1203 8.48815 11.3107L10.6095 13.432" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M8 17C8.00016 14.121 9.15919 11.3634 11.2218 9.32462C13.2845 7.28587 16.0566 6.16156 19 6.20003" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Contact
+              </a>
+            </li>
+            <li class="sidebar-nav-item">
+              <a href="#" class="sidebar-nav-link">
+                <svg class="sidebar-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M14 2V8H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M16 13H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M16 17H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M10 9H9H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Documentation
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Header -->
+      <header class="main-header">
+        <h1 class="main-title">Dashboard</h1>
+        
+        <div class="user-profile">
+          <div class="user-info">
+            <div class="user-name">John Doe</div>
+            <div class="user-role">Power Creator</div>
+          </div>
+          <div class="user-avatar">JD</div>
+        </div>
+      </header>
+      
+      <!-- Dashboard Stats -->
+      <div class="dashboard-grid">
+        <div class="dashboard-card">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">Active Subscribers</h3>
+              <p class="card-subtitle">Total across all accounts</p>
+            </div>
+            <div class="card-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M9 11C11.2091 11 13 9.20914 13 7C13 4.79086 11.2091 3 9 3C6.79086 3 5 4.79086 5 7C5 9.20914 6.79086 11 9 11Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89318 18.7122 8.75608 18.1676 9.45769C17.623 10.1593 16.8604 10.6597 16 10.88" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+          <div class="card-value">1,284</div>
+          <div class="card-change card-change-positive">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 19V5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M5 12L12 5L19 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            12.5% from last month
+          </div>
+        </div>
+        
+        <div class="dashboard-card">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">Revenue</h3>
+              <p class="card-subtitle">Total for current month</p>
+            </div>
+            <div class="card-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 1V23" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M17 5H9.5C8.57174 5 7.6815 5.36875 7.02513 6.02513C6.36875 6.6815 6 7.57174 6 8.5C6 9.42826 6.36875 10.3185 7.02513 10.9749C7.6815 11.6313 8.57174 12 9.5 12H14.5C15.4283 12 16.3185 12.3687 16.9749 13.0251C17.6313 13.6815 18 14.5717 18 15.5C18 16.4283 17.6313 17.3185 16.9749 17.9749C16.3185 18.6313 15.4283 19 14.5 19H6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+          <div class="card-value">$14,385</div>
+          <div class="card-change card-change-positive">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 19V5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M5 12L12 5L19 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            8.2% from last month
+          </div>
+        </div>
+        
+        <div class="dashboard-card">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">PPV Conversion</h3>
+              <p class="card-subtitle">Average conversion rate</p>
+            </div>
+            <div class="card-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M22 12H18L16 16L12 8L10 12H2" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+          <div class="card-value">42.8%</div>
+          <div class="card-change card-change-positive">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 19V5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M5 12L12 5L19 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            5.3% from last month
+          </div>
+        </div>
+        
+        <div class="dashboard-card">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">Response Time</h3>
+              <p class="card-subtitle">Average time to respond</p>
+            </div>
+            <div class="card-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 8V12L15 15" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M3.05 11.0001C3.31422 8.40081 4.55389 5.99848 6.52219 4.27895C8.49048 2.55943 11.0243 1.64228 13.6347 1.74552C16.2451 1.84876 18.6966 2.96646 20.5262 4.88449C22.3559 6.80253 23.4129 9.30343 23.4489 11.9146C23.4849 14.5258 22.4975 17.0567 20.7418 18.9977C18.986 20.9387 16.4606 22.1621 13.7666 22.4395C11.0726 22.7168 8.39255 22.0224 6.2267 20.5089C4.06085 18.9953 2.58368 16.7764 2.05 14.2001" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+          <div class="card-value">12s</div>
+          <div class="card-change card-change-negative">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 5V19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M19 12L12 19L5 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            2.1s from last month
+          </div>
+        </div>
+      </div>
+      
+      <!-- License Section -->
+      <section class="license-section" id="license-section">
+        <div class="license-header">
+          <h2 class="license-title">License & Activation</h2>
+          <button class="subscription-btn upgrade">Upgrade Plan</button>
+        </div>
+        
+        <div class="license-key-container">
+          <div class="license-key">
+            <span class="license-key-segment">AURA</span>-
+            <span class="license-key-segment">AI42</span>-
+            <span class="license-key-segment">7X8Y</span>-
+            <span class="license-key-segment">9Z3W</span>-
+            <span class="license-key-segment">P5QR</span>
+          </div>
+          <button class="license-copy-btn" id="copy-license-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 9H11C9.89543 9 9 9.89543 9 11V20C9 21.1046 9.89543 22 11 22H20C21.1046 22 22 21.1046 22 20V11C22 9.89543 21.1046 9 20 9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M5 15H4C3.46957 15 2.96086 14.7893 2.58579 14.4142C2.21071 14.0391 2 13.5304 2 13V4C2 3.46957 2.21071 2.96086 2.58579 2.58579C2.96086 2.21071 3.46957 2 4 2H13C13.5304 2 14.0391 2.21071 14.4142 2.58579C14.7893 2.96086 15 3.46957 15 4V5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Copy
+          </button>
+        </div>
+        
+        <div class="license-info">
+          <div class="license-info-item">
+            <div class="license-info-label">License Type</div>
+            <div class="license-info-value">Power Creator</div>
+          </div>
+          
+          <div class="license-info-item">
+            <div class="license-info-label">Status</div>
+            <div class="license-info-value">
+              <span class="license-status license-status-active">Active</span>
+            </div>
+          </div>
+          
+          <div class="license-info-item">
+            <div class="license-info-label">Activation Date</div>
+            <div class="license-info-value">Jan 15, 2025</div>
+          </div>
+          
+          <div class="license-info-item">
+            <div class="license-info-label">Expiration Date</div>
+            <div class="license-info-value">Jan 15, 2026</div>
+          </div>
+          
+          <div class="license-info-item">
+            <div class="license-info-label">Allowed Devices</div>
+            <div class="license-info-value">2 of 2 activated</div>
+          </div>
+          
+          <div class="license-info-item">
+            <div class="license-info-label">OnlyFans Accounts</div>
+            <div class="license-info-value">1 of 1 connected</div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Download Section -->
+      <section class="download-section" id="download-section">
+        <div class="download-header">
+          <h2 class="section-title">Download AuraAI</h2>
+          <p class="section-subtitle">Install the AuraAI application on your devices</p>
+        </div>
+        
+        <div class="download-options">
+          <div class="download-card">
+            <img src="/api/placeholder/60/60" alt="Windows Logo" class="download-icon">
+            <h3 class="download-title">AuraAI for Windows</h3>
+            <p class="download-description">Compatible with Windows 10 and Windows 11</p>
+            <div class="download-version">Version 2.1.4 (Latest)</div>
+            <button class="download-btn" id="download-windows">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Download for Windows
+            </button>
+          </div>
+          
+          <div class="download-card">
+            <img src="/api/placeholder/60/60" alt="Mac Logo" class="download-icon">
+            <h3 class="download-title">AuraAI for macOS</h3>
+            <p class="download-description">Compatible with macOS Big Sur (11.0) and later</p>
+            <div class="download-version">Version 2.1.4 (Latest)</div>
+            <button class="download-btn" id="download-mac">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Download for macOS
+            </button>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Device Pairing Section -->
+      <section class="devices-section" id="devices-section">
+        <div class="devices-header">
+          <h2 class="devices-title">Device Pairing</h2>
+          <button class="pair-device-btn" id="pair-device-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 5V19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Pair New Device
+          </button>
+        </div>
+        
+        <div class="devices-list">
+          <div class="device-card">
+            <div class="device-header">
+              <div class="device-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M21 16V8C21 7.46957 20.7893 6.96086 20.4142 6.58579C20.0391 6.21071 19.5304 6 19 6H5C4.46957 6 3.96086 6.21071 3.58579 6.58579C3.21071 6.96086 3 7.46957 3 8V16C3 16.5304 3.21071 17.0391 3.58579 17.4142C3.96086 17.7893 4.46957 18 5 18H19C19.5304 18 20.0391 17.7893 20.4142 17.4142C20.7893 17.0391 21 16.5304 21 16Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M12 14C13.1046 14 14 13.1046 14 12C14 10.8954 13.1046 10 12 10C10.8954 10 10 10.8954 10 12C10 13.1046 10.8954 14 12 14Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="device-info">
+                <div class="device-name">John's MacBook Pro</div>
+                <div class="device-id">Device ID: MAC-2835F94A</div>
+              </div>
+            </div>
+            <div class="device-status device-active">Active Now</div>
+            <div class="device-details">
+              <div class="device-detail-label">OS Version</div>
+              <div class="device-detail-value">macOS 14.3.1</div>
+              <div class="device-detail-label">App Version</div>
+              <div class="device-detail-value">2.1.4</div>
+              <div class="device-detail-label">Last Active</div>
+              <div class="device-detail-value">Now</div>
+              <div class="device-detail-label">IP Address</div>
+              <div class="device-detail-value">192.168.1.5</div>
+            </div>
+            <div class="device-actions">
+              <button class="device-action-btn">Refresh</button>
+              <button class="device-action-btn remove">Remove</button>
+            </div>
+          </div>
+          
+          <div class="device-card">
+            <div class="device-header">
+              <div class="device-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M17 2H7C5.89543 2 5 2.89543 5 4V20C5 21.1046 5.89543 22 7 22H17C18.1046 22 19 21.1046 19 20V4C19 2.89543 18.1046 2 17 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M12 18H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="device-info">
+                <div class="device-name">iPhone 15 Pro</div>
+                <div class="device-id">Device ID: IOS-A47B29DE</div>
+              </div>
+            </div>
+            <div class="device-status device-inactive">Last active 2 days ago</div>
+            <div class="device-details">
+              <div class="device-detail-label">OS Version</div>
+              <div class="device-detail-value">iOS 17.3</div>
+              <div class="device-detail-label">App Version</div>
+              <div class="device-detail-value">2.1.3</div>
+              <div class="device-detail-label">Last Active</div>
+              <div class="device-detail-value">Mar 19, 2025</div>
+              <div class="device-detail-label">IP Address</div>
+              <div class="device-detail-value">93.184.216.34</div>
+            </div>
+            <div class="device-actions">
+              <button class="device-action-btn">Refresh</button>
+              <button class="device-action-btn remove">Remove</button>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Billing Section -->
+      <section class="billing-section" id="billing-section">
+        <div class="billing-header">
+          <h2 class="billing-title">Billing & Subscription</h2>
+        </div>
+        
+        <div class="subscription-card">
+          <div class="subscription-header">
+            <div class="subscription-plan">Power Creator Plan</div>
+            <div class="subscription-status active">Active</div>
+          </div>
+          
+          <div class="subscription-details">
+            <div class="subscription-detail">
+              <div class="subscription-detail-label">Billing Cycle</div>
+              <div class="subscription-detail-value">Monthly</div>
+            </div>
+            
+            <div class="subscription-detail">
+              <div class="subscription-detail-label">Next Payment</div>
+              <div class="subscription-detail-value">April 15, 2025</div>
+            </div>
+            
+            <div class="subscription-detail">
+              <div class="subscription-detail-label">Amount</div>
+              <div class="subscription-detail-value">$499.00</div>
+            </div>
+            
+            <div class="subscription-detail">
+              <div class="subscription-detail-label">Payment Method</div>
+              <div class="subscription-detail-value">•••• 4242</div>
+            </div>
+          </div>
+          
+          <div class="subscription-actions">
+            <button class="subscription-btn upgrade">Upgrade Plan</button>
+            <button class="subscription-btn">Change Billing Cycle</button>
+            <button class="subscription-btn">Cancel Subscription</button>
+          </div>
+        </div>
+        
+        <div class="payment-methods">
+          <div class="payment-methods-header">
+            <h3 class="payment-methods-title">Payment Methods</h3>
+            <button class="add-payment-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 5V19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Add Payment Method
+            </button>
+          </div>
+          
+          <div class="payment-methods-list">
+            <div class="payment-method">
+              <div class="payment-method-icon">
+                <img src="/api/placeholder/40/30" alt="Mastercard">Visa">
+              </div>
+              <div class="payment-method-info">
+                <div class="payment-method-name">Visa ending in 4242</div>
+                <div class="payment-method-details">Expires 12/2027</div>
+              </div>
+              <span class="payment-method-default">Default</span>
+              <div class="payment-method-actions">
+                <button class="payment-method-btn">Edit</button>
+                <button class="payment-method-btn remove">Remove</button>
+              </div>
+            </div>
+            
+            <div class="payment-method">
+              <div class="payment-method-icon">
+                <img src="/api/placeholder/40/30" alt="

@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>License Activation - AuraAI</title>
+  <style>
+    /* Modern Apple-inspired Design System with Enhanced Glassmorphism */
+    :root {
+      /* Core colors */
+      --bg-primary: #000000;
+      --bg-secondary: #0a0a0a;
+      --bg-tertiary: #1a1a1a;
+      --accent-primary: #2f7fff;
+      --accent-secondary: #46a6ff;
+      --accent-glow: rgba(47, 127, 255, 0.3);
+      --text-primary: #ffffff;
+      --text-secondary: rgba(255, 255, 255, 0.7);
+      --text-tertiary: rgba(255, 255, 255, 0.5);
+      --success: #2ecc71;
+      --success-glow: rgba(46, 204, 113, 0.3);
+      --warning: #f39c12;
+      --danger: #e74c3c;
+      --danger-glow: rgba(231, 76, 60, 0.3);
+      
+      /* Spacing */
+      --spacing-xs: 4px;
+      --spacing-sm: 8px;
+      --spacing-md: 16px;
+      --spacing-lg: 24px;
+      --spacing-xl: 32px;
+      --spacing-xxl: 48px;
+      --spacing-xxxl: 64px;
+      
+      /* Typography */
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      
+      /* Radii */
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-full: 9999px;
+      
+      /* Z-index layers */
+      --z-navbar: 100;
+      --z-modal: 200;
+      
+      /* Enhanced Glass effects */
+      --glass-bg: rgba(10, 10, 10, 0.4);
+      --glass-border: rgba(255, 255, 255, 0.15);
+      --glass-blur: 15px;
+      --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      --glass-highlight: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.15) 0%,
+        rgba(255, 255, 255, 0.05) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 20% 20%, rgba(70, 166, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(46, 204, 113, 0.08) 0%, transparent 50%);
+      background-attachment: fixed;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Typography */
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    h2 {
+      font-size: 2rem;
+      margin-bottom: var(--spacing-md);
+    }
+    
+    h3 {
+      font-size: 1.5rem;
+      margin-bottom: var(--spacing-md);
+    }
+    
+    p {
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: var(--spacing-md);
+    }
+    
+    a {
+      color: var(--accent-primary);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    
+    a:hover {
+      color: var(--accent-secondary);
+    }
+    
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--spacing-lg);
+    }
+    
+    /* Header */
+    .header {
+      padding: var(--spacing-md) 0;
+      border-bottom: 1px solid var(--glass-border);
+      background-color: rgba(10, 10, 10, 0.7);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+    }
+    
+    .header-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+    
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      margin-right: var(--spacing-md);
+    }
+    
+    .logo-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    
+    .logo-text {
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+    }
+    
+    /* Activation Page */
+    .activation-container {
+      padding: var(--spacing-xxxl) 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
+    }
+    
+    .activation-card {
+      background-color: rgba(26, 26, 26, 0.5);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-xxl);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      max-width: 700px;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .activation-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 200%;
+      height: 1px;
+      background: linear-gradient(90deg, 
+                               transparent, 
+                               rgba(255, 255, 255, 0.3), 
+                               transparent);
+    }
+    
+    .activation-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, 
+                              rgba(255, 255, 255, 0.1) 0%, 
+                              rgba(255, 255, 255, 0) 100%);
+      pointer-events: none;
+    }
+    
+    .activation-header {
+      text-align: center;
+      margin-bottom: var(--spacing-xl);
+    }
+    
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      background-color: rgba(46, 204, 113, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto var(--spacing-lg);
+    }
+    
+    .license-info {
+      background-color: rgba(10, 10, 10, 0.4);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-lg);
+      margin-bottom: var(--spacing-xl);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .license-key {
+      font-family: monospace;
+      font-size: 1.4rem;
+      text-align: center;
+      margin-bottom: var(--spacing-md);
+      letter-spacing: 1px;
+      color: var(--text-primary);
+    }
+    
+    .license-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--spacing-lg);
+    }
+    
+    .license-detail {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-xs);
+    }
+    
+    .license-detail-label {
+      font-size: 0.9rem;
+      color: var(--text-tertiary);
+    }
+    
+    .license-detail-value {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    
+    .copy-license-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-sm);
+      background-color: rgba(47, 127, 255, 0.1);
+      color: var(--accent-primary);
+      border: 1px solid rgba(47, 127, 255, 0.3);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-sm) var(--spacing-lg);
+      font-size: 0.9rem;
+      cursor: pointer;
+      margin: 0 auto;
+      transition: all 0.2s ease;
+    }
+    
+    .copy-license-btn:hover {
+      background-color: rgba(47, 127, 255, 0.15);
+      transform: translateY(-2px);
+    }
+    
+    .activation-steps {
+      margin-top: var(--spacing-xl);
+    }
+    
+    .step {
+      display: flex;
+      margin-bottom: var(--spacing-lg);
+      gap: var(--spacing-md);
+    }
+    
+    .step-number {
+      width: 30px;
+      height: 30px;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+    
+    .step-content {
+      flex: 1;
+    }
+    
+    .step-title {
+      font-weight: 600;
+      margin-bottom: var(--spacing-xs);
+      color: var(--text-primary);
+    }
+    
+    .step-description {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+    
+    .download-buttons {
+      display: flex;
+      gap: var(--spacing-md);
+      margin-top: var(--spacing-xl);
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .download-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-sm);
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      color: white;
+      border: none;
+      border-radius: var(--radius-md);
+      padding: var(--spacing-md) var(--spacing-xl);
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      flex: 1;
+      min-width: 200px;
+      max-width: 250px;
+    }
+    
+    .download-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(47, 127, 255, 0.4);
+    }
+    
+    .support-note {
+      margin-top: var(--spacing-xl);
+      text-align: center;
+      padding-top: var(--spacing-lg);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .support-note p {
+      font-size: 0.9rem;
+      color: var(--text-tertiary);
+    }
+    
+    /* Footer */
+    .footer {
+      padding: var(--spacing-lg) 0;
+      background-color: rgba(10, 10, 10, 0.7);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border-top: 1px solid var(--glass-border);
+      text-align: center;
+    }
+    
+    .footer p {
+      font-size: 0.9rem;
+      color: var(--text-tertiary);
+      margin: 0;
+    }
+    
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+      .activation-card {
+        padding: var(--spacing-lg);
+      }
+      
+      .license-details {
+        grid-template-columns: 1fr;
+      }
+      
+      .download-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .download-btn {
+        max-width: 100%;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container header-container">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <img src="https://i.imgur.com/8GObyDN.png" alt="AuraAI Logo">
+        </div>
+        <div class="logo-text">AuraAI</div>
+      </a>
+    </div>
+  </header>
+  
+  <!-- Activation Content -->
+  <main class="activation-container">
+    <div class="container">
+      <div class="activation-card">
+        <div class="activation-header">
+          <div class="success-icon">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 6L9 17L4 12" stroke="#2ecc71" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h1>Thank You for Your Purchase!</h1>
+          <p>Your AuraAI subscription has been successfully activated. Below is your license key and next steps to get started.</p>
+        </div>
+        
+        <div class="license-info">
+          <div class="license-key" id="license-key">AURA-AI42-7X8Y-9Z3W-P5QR</div>
+          
+          <button class="copy-license-btn" id="copy-license-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 9H11C9.89543 9 9 9.89543 9 11V20C9 21.1046 9.89543 22 11 22H20C21.1046 22 22 21.1046 22 20V11C22 9.89543 21.1046 9 20 9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M5 15H4C3.46957 15 2.96086 14.7893 2.58579 14.4142C2.21071 14.0391 2 13.5304 2 13V4C2 3.46957 2.21071 2.96086 2.58579 2.58579C2.96086 2.21071 3.46957 2 4 2H13C13.5304 2 14.0391 2.21071 14.4142 2.58579C14.7893 2.96086 15 3.46957 15 4V5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Copy License Key
+          </button>
+          
+          <div class="license-details">
+            <div class="license-detail">
+              <div class="license-detail-label">Plan</div>
+              <div class="license-detail-value">Power Creator</div>
+            </div>
+            
+            <div class="license-detail">
+              <div class="license-detail-label">Status</div>
+              <div class="license-detail-value">Active</div>
+            </div>
+            
+            <div class="license-detail">
+              <div class="license-detail-label">Activation Date</div>
+              <div class="license-detail-value" id="activation-date">March 21, 2025</div>
+            </div>
+            
+            <div class="license-detail">
+              <div class="license-detail-label">Expires On</div>
+              <div class="license-detail-value" id="expiration-date">March 21, 2026</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="activation-steps">
+          <h3>Next Steps</h3>
+          
+          <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <div class="step-title">Download AuraAI</div>
+              <div class="step-description">Download the AuraAI application for your platform. The application is available for Windows and macOS.</div>
+            </div>
+          </div>
+          
+          <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <div class="step-title">Install the Application</div>
+              <div class="step-description">Run the installer and follow the on-screen instructions to install AuraAI on your computer.</div>
+            </div>
+          </div>
+          
+          <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <div class="step-title">Enter Your License Key</div>
+              <div class="step-description">When prompted, enter the license key shown above to activate your AuraAI installation. Your license key has also been sent to your email address.</div>
+            </div>
+          </div>
+          
+          <div class="step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+              <div class="step-title">Connect Your OnlyFans Account</div>
+              <div class="step-description">Follow the guided process to connect your OnlyFans account and start automating your interactions.</div>
+            </div>
+          </div>
+          
+          <div class="download-buttons">
+            <button class="download-btn" id="download-windows">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 12H11V3H3V12Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M13 21H21V12H13V21Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M13 3V12H21V3H13Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M3 21H11V12H3V21Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Download for Windows
+            </button>
+            
+            <button class="download-btn" id="download-mac">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12.5 2C10.8 2 9.3 2.8 8.2 4.2C7.3 5.4 7 6.7 7 7.9C7 8.3 7 8.6 7.1 8.9C9.3 9.4 11 11.3 11 13.5C11 16 9.2 18.1 6.8 18.5C7.5 20 8.3 21.4 9.3 22.5C10.2 23.5 11 24 12 24C13 24 13.8 23.5 14.7 22.5C15.6 21.6 16.4 20.1 17.1 18.6C17.8 17.1 18.2 15.4 18.2 13.8C18.2 10.5 15.8 8.5 12.5 2Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M10 14C10 11.8 8.8 9.9 7 9.1C7.4 6.6 8.5 4.4 10 3.3C10.8 2.7 11.6 2.5 12.4 2.5C12.6 2.5 12.8 2.5 13 2.5C12.9 3.6 13 5.3 13.9 6.7C15 8.4 16.9 9.6 16.9 13.6C16.9 15 16.6 16.4 16 17.7C15.4 19.1 14.7 20.2 13.9 21C13.2 21.8 12.4 22.4 11.6 22.4C10.8 22.4 10 21.9 9.2 21C8.6 20.3 8 19.5 7.5 18.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Download for macOS
+            </button>
+          </div>
+        </div>
+        
+        <div class="support-note">
+          <p>Need help? Contact our support team at <a href="mailto:support@auraai.com">support@auraai.com</a></p>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2025 AuraAI. All rights reserved.</p>
+    </div>
+  </footer>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Set current date and expiration date (1 year later)
+      const currentDate = new Date();
+      const expirationDate = new Date();
+      expirationDate.setFullYear(expirationDate.getFullYear() + 1);
+      
+      // Format dates
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      document.getElementById('activation-date').textContent = currentDate.toLocaleDateString('en-US', options);
+      document.getElementById('expiration-date').textContent = expirationDate.toLocaleDateString('en-US', options);
+      
+      // Copy license key functionality
+      const copyLicenseBtn = document.getElementById('copy-license-btn');
+      const licenseKey = document.getElementById('license-key');
+      
+      copyLicenseBtn.addEventListener('click', function() {
+        navigator.clipboard.writeText(licenseKey.textContent).then(() => {
+          // Change button text temporarily
+          const originalText = copyLicenseBtn.innerHTML;
+          copyLicenseBtn.innerHTML = `
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Copied!
+          `;
+          
+          // Revert after 2 seconds
+          setTimeout(() => {
+            copyLicenseBtn.innerHTML = originalText;
+          }, 2000);
+        }).catch(err => {
+          console.error('Failed to copy: ', err);
+        });
+      });
+      
+      // Download functionality
+      const downloadWindows = document.getElementById('download-windows');
+      const downloadMac = document.getElementById('download-mac');
+      
+      downloadWindows.addEventListener('click', function() {
+        // Create a fake download link
+        const link = document.createElement('a');
+        link.href = '#'; // In a real app, this would be the actual download URL
+        link.download = 'AuraAI-Windows-2.1.4.exe';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        // Show notification
+        showNotification('Your download is starting...', 'Windows');
+      });
+      
+      downloadMac.addEventListener('click', function() {
+        // Create a fake download link
+        const link = document.createElement('a');
+        link.href = '#'; // In a real app, this would be the actual download URL
+        link.download = 'AuraAI-macOS-2.1.4.dmg';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        // Show notification
+        showNotification('Your download is starting...', 'macOS');
+      });
+      
+      function showNotification(message, platform) {
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.style.position = 'fixed';
+        notification.style.bottom = '20px';
+        notification.style.right = '20px';
+        notification.style.backgroundColor = 'rgba(47, 127, 255, 0.1)';
+        notification.style.color = 'var(--text-primary)';
+        notification.style.padding = '15px 20px';
+        notification.style.borderRadius = 'var(--radius-md)';
+        notification.style.border = '1px solid var(--accent-primary)';
+        notification.style.backdropFilter = 'blur(var(--glass-blur))';
+        notification.style.zIndex = '1000';
+        notification.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
+        notification.style.display = 'flex';
+        notification.style.alignItems = 'center';
+        notification.style.gap = '10px';
+        
+        notification.innerHTML = `
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="var(--accent-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M7 10L12 15L17 10" stroke="var(--accent-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12 15V3" stroke="var(--accent-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div>
+            <div style="font-weight: 600; margin-bottom: 2px;">Downloading AuraAI for ${platform}</div>
+            <div style="font-size: 0.9rem; color: var(--text-secondary);">${message}</div>
+          </div>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Remove notification after 5 seconds
+        setTimeout(() => {
+          notification.style.opacity = '0';
+          notification.style.transition = 'opacity 0.5s ease';
+          setTimeout(() => {
+            notification.remove();
+          }, 500);
+        }, 5000);
+      }
+    });
+  </script>
+</body>
+</html>

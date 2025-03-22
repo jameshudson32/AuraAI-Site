@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login - AuraAI</title>
+  <style>
+    /* Modern Apple-inspired Design System with Enhanced Glassmorphism */
+    :root {
+      /* Core colors */
+      --bg-primary: #000000;
+      --bg-secondary: #0a0a0a;
+      --bg-tertiary: #1a1a1a;
+      --accent-primary: #2f7fff;
+      --accent-secondary: #46a6ff;
+      --accent-glow: rgba(47, 127, 255, 0.3);
+      --text-primary: #ffffff;
+      --text-secondary: rgba(255, 255, 255, 0.7);
+      --text-tertiary: rgba(255, 255, 255, 0.5);
+      --success: #2ecc71;
+      --success-glow: rgba(46, 204, 113, 0.3);
+      --warning: #f39c12;
+      --danger: #e74c3c;
+      --danger-glow: rgba(231, 76, 60, 0.3);
+      
+      /* Spacing */
+      --spacing-xs: 4px;
+      --spacing-sm: 8px;
+      --spacing-md: 16px;
+      --spacing-lg: 24px;
+      --spacing-xl: 32px;
+      --spacing-xxl: 48px;
+      --spacing-xxxl: 64px;
+      
+      /* Typography */
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      
+      /* Radii */
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-full: 9999px;
+      
+      /* Z-index layers */
+      --z-navbar: 100;
+      --z-modal: 200;
+      
+      /* Enhanced Glass effects */
+      --glass-bg: rgba(10, 10, 10, 0.4);
+      --glass-border: rgba(255, 255, 255, 0.15);
+      --glass-blur: 15px;
+      --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      --glass-highlight: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.15) 0%,
+        rgba(255, 255, 255, 0.05) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 20% 20%, rgba(70, 166, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(46, 204, 113, 0.08) 0%, transparent 50%);
+      background-attachment: fixed;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Typography */
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+    }
+    
+    h1 {
+      font-size: 3rem;
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    h2 {
+      font-size: 2.5rem;
+      margin-bottom: var(--spacing-md);
+    }
+    
+    h3 {
+      font-size: 1.75rem;
+      margin-bottom: var(--spacing-md);
+    }
+    
+    p {
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: var(--spacing-md);
+    }
+    
+    a {
+      color: var(--accent-primary);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    
+    a:hover {
+      color: var(--accent-secondary);
+    }
+    
+    /* Container */
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--spacing-lg);
+    }
+    
+    /* Admin Login */
+    .admin-login-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: var(--spacing-xl) 0;
+    }
+    
+    .admin-login-card {
+      width: 100%;
+      max-width: 400px;
+      background-color: rgba(26, 26, 26, 0.5);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-xxl);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .admin-login-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 200%;
+      height: 1px;
+      background: linear-gradient(90deg, 
+                               transparent, 
+                               rgba(255, 255, 255, 0.3), 
+                               transparent);
+    }
+    
+    .admin-login-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, 
+                              rgba(255, 255, 255, 0.1) 0%, 
+                              rgba(255, 255, 255, 0) 100%);
+      pointer-events: none;
+    }
+    
+    .admin-login-header {
+      text-align: center;
+      margin-bottom: var(--spacing-xl);
+    }
+    
+    .admin-login-logo {
+      margin-bottom: var(--spacing-lg);
+      display: flex;
+      justify-content: center;
+    }
+    
+    .admin-login-logo img {
+      height: 60px;
+    }
+    
+    .admin-login-title {
+      font-size: 2rem;
+      margin-bottom: var(--spacing-sm);
+    }
+    
+    .admin-login-subtitle {
+      color: var(--text-secondary);
+    }
+    
+    .admin-login-form {
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .form-group {
+      margin-bottom: var(--spacing-md);
+    }
+    
+    .form-label {
+      display: block;
+      margin-bottom: var(--spacing-xs);
+      color: var(--text-secondary);
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: var(--spacing-md);
+      border-radius: var(--radius-md);
+      background-color: rgba(26, 26, 26, 0.7);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: var(--text-primary);
+      font-size: 16px;
+      transition: all 0.2s ease;
+    }
+    
+    .form-input:focus {
+      outline: none;
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+    
+    .form-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .btn {
+      border: none;
+      outline: none;
+      padding: var(--spacing-md) var(--spacing-lg);
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-sm);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.1);
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+    }
+    
+    .btn:hover::before {
+      transform: translateX(0);
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      color: var(--text-primary);
+      box-shadow: 0 4px 14px rgba(47, 127, 255, 0.4);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(47, 127, 255, 0.5);
+    }
+    
+    .btn-primary:active {
+      transform: translateY(0);
+      opacity: 0.9;
+    }
+    
+    .form-btn {
+      width: 100%;
+      margin-top: var(--spacing-md);
+    }
+    
+    .remember-me {
+      display: flex;
+      align-items: center;
+    }
+    
+    .remember-me input {
+      margin-right: var(--spacing-xs);
+    }
+    
+    .remember-me label {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+    
+    .alert {
+      padding: var(--spacing-md);
+      border-radius: var(--radius-md);
+      margin-bottom: var(--spacing-md);
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+    }
+    
+    .alert-danger {
+      background-color: rgba(231, 76, 60, 0.2);
+      border: 1px solid rgba(231, 76, 60, 0.3);
+    }
+    
+    .alert-success {
+      background-color: rgba(46, 204, 113, 0.2);
+      border: 1px solid rgba(46, 204, 113, 0.3);
+    }
+    
+    .alert-icon {
+      flex-shrink: 0;
+    }
+    
+    .alert-message {
+      flex: 1;
+    }
+    
+    /* Error message */
+    .error-message {
+      display: none;
+      color: var(--danger);
+      font-size: 0.9rem;
+      margin-top: var(--spacing-xs);
+    }
+    
+    /* Footer */
+    .footer {
+      margin-top: auto;
+      padding: var(--spacing-lg) 0;
+      text-align: center;
+    }
+    
+    .footer p {
+      font-size: 0.9rem;
+      color: var(--text-tertiary);
+      margin: 0;
+    }
+    
+    /* Responsive Adjustments */
+    @media (max-width: 480px) {
+      .admin-login-card {
+        padding: var(--spacing-lg);
+      }
+      
+      .admin-login-title {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Admin Login Container -->
+  <main class="admin-login-container">
+    <div class="admin-login-card">
+      <div class="admin-login-header">
+        <div class="admin-login-logo">
+          <img src="https://i.imgur.com/Oyxbzxf.png" alt="AuraAI Logo">
+        </div>
+        <h1 class="admin-login-title">Admin Portal</h1>
+        <p class="admin-login-subtitle">Sign in to access admin functions</p>
+      </div>
+      
+      <!-- Admin Login Form -->
+      <form class="admin-login-form" id="admin-login-form">
+        <div id="login-alert" style="display: none;"></div>
+        
+        <div class="form-group">
+          <label class="form-label" for="email">Email</label>
+          <input type="email" id="email" class="form-input" value="james@aura-bot.io" required>
+          <div class="error-message" id="email-error"></div>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <input type="password" id="password" class="form-input" value="Douglas1963" required>
+          <div class="error-message" id="password-error"></div>
+        </div>
+        
+        <div class="form-footer">
+          <div class="remember-me">
+            <input type="checkbox" id="remember-me" checked>
+            <label for="remember-me">Remember me</label>
+          </div>
+        </div>
+        
+        <button type="submit" class="btn btn-primary form-btn">Sign In</button>
+      </form>
+      
+      <div class="admin-login-footer">
+        <a href="../index.html">Back to main site</a>
+      </div>
+    </div>
+  </main>
+  
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2025 AuraAI. All rights reserved.</p>
+  </footer>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const loginForm = document.getElementById('admin-login-form');
+      const loginAlert = document.getElementById('login-alert');
+      
+      loginForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Get form values
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        
+        // Check credentials
+        if (email === 'james@aura-bot.io' && password === 'Douglas1963') {
+          // Successful login
+          loginAlert.innerHTML = `
+            <div class="alert alert-success">
+              <div class="alert-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="alert-message">Login successful! Redirecting to admin dashboard...</div>
+            </div>
+          `;
+          loginAlert.style.display = 'block';
+          
+          // Set admin session
+          localStorage.setItem('admin_session', 'true');
+          localStorage.setItem('admin_email', email);
+          
+          // Redirect to admin dashboard
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 1500);
+        } else {
+          // Failed login
+          loginAlert.innerHTML = `
+            <div class="alert alert-danger">
+              <div class="alert-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                  <path d="M15 9L9 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M9 9L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div class="alert-message">Invalid email or password. Please try again.</div>
+            </div>
+          `;
+          loginAlert.style.display = 'block';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
